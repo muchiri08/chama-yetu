@@ -32,5 +32,5 @@ public class Decision implements Serializable {
     private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member members;
+    private Member member;
 }

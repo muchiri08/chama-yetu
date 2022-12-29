@@ -33,6 +33,6 @@ public class FinancialReport implements Serializable {
     @Enumerated(EnumType.STRING)
     private FinancialReportType type;
     private LocalDateTime date;
-    @OneToMany(mappedBy = "financialReport", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "report", cascade = CascadeType.ALL)
     private List<FinancialReportData> data;
 }
