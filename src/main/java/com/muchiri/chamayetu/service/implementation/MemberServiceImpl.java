@@ -11,14 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
+
+    private final ModelMapper modelMapper;
     private final MemberRepository memberRepository;
 
     @Override
     public MemberDto createMember(MemberDto memberDto) {
-        ModelMapper modelMapper = new ModelMapper();
         Member member =modelMapper.map(memberDto, Member.class);
         memberRepository.save(member);
-        MemberDto dto = modelMapper.map(member, MemberDto.class);
-        return dto;
+        MemberDto responseDto = modelMapper.map(member, MemberDto.class);
+        return responseDto;
     }
 }
