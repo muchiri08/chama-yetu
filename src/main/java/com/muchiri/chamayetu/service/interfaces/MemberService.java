@@ -10,5 +10,6 @@ public interface MemberService {
     MemberDto createMember(MemberDto memberDto);
     Page<MemberDto> getAllMembers(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     MemberDto updateMember(Long id, MemberDto memberDto) throws NoDataFoundException;
+    String deleteMember(Long id) throws NoDataFoundException;
 
 }

@@ -6,8 +6,8 @@ import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.repository.MemberRepository;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final ModelMapper modelMapper = new ModelMapper();
@@ -66,5 +67,23 @@ public class MemberServiceImpl implements MemberService {
         MemberDto responseDto = modelMapper.map(updatedMember, MemberDto.class);
 
         return responseDto;
+    }
+
+    @Transactional
+    @Override
+    public String deleteMember(Long id) throws NoDataFoundException {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Member with ID " + id + " not found")
+        );
+        memberRepository.delete(member);
+
+        Member deletedMember = memberRepository.findById(id).orElse(null);
+        if (deletedMember == null) {
+            log.info("Member deleted successfully");
+            return "Member deleted successfully";
+        } else {
+            log.error("Member with id " + id + " not deleted");
+            return "Member with id " + id + " not deleted";
+        }
     }
 }

@@ -3,7 +3,6 @@ package com.muchiri.chamayetu.advice;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -38,22 +37,31 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public Map<String, String> handleEmptyResultDataAccessException(EmptyResultDataAccessException emptyResultDataAccessException){
-        errorMap.put("errorMessage", emptyResultDataAccessException.getMessage());
+        errorMap.put("message", emptyResultDataAccessException.getMessage());
         return errorMap;
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(PageNotFoundException.class)
     public Map<String, String> handlePageNotFoundException(PageNotFoundException pageNotFoundException){
-        errorMap.put("errorMessage", pageNotFoundException.getMessage());
+        errorMap.put("message", pageNotFoundException.getMessage());
 
         return errorMap;
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoDataFoundException.class)
     public Map<String, String> handleNoDataFoundException(NoDataFoundException noDataFoundException){
-        errorMap.put("errorMessage", noDataFoundException.getMessage());
+        errorMap.put("message", noDataFoundException.getMessage());
+
         return errorMap;
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(Exception.class)
+    public Map<String, String> handleAnyException(Exception exception){
+        errorMap.put("message", exception.getMessage());
+        return errorMap;
+    }
+
 }

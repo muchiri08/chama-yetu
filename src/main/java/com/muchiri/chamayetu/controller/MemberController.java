@@ -1,12 +1,10 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.MemberDto;
-import com.muchiri.chamayetu.entity.Member;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +37,10 @@ public class MemberController {
         MemberDto responseDto = memberService.updateMember(id, memberDto);
 
         return ResponseEntity.ok(responseDto);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteMember(@PathVariable("id") Long id) throws NoDataFoundException{
+        return memberService.deleteMember(id);
     }
 }
