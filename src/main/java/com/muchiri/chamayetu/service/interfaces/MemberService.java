@@ -11,5 +11,6 @@ public interface MemberService {
     Page<MemberDto> getAllMembers(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     MemberDto updateMember(Long id, MemberDto memberDto) throws NoDataFoundException;
     String deleteMember(Long id) throws NoDataFoundException;
+    MemberDto findMemberById(Long id) throws NoDataFoundException;
 
 }

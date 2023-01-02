@@ -32,6 +32,13 @@ public class MemberController {
         return ResponseEntity.ok(members);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MemberDto> findMemberById(@PathVariable("id") Long id) throws NoDataFoundException {
+        MemberDto memberDto = memberService.findMemberById(id);
+
+        return ResponseEntity.ok(memberDto);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<MemberDto> updateMember(@PathVariable("id") Long id, @RequestBody @Valid MemberDto memberDto) throws NoDataFoundException {
         MemberDto responseDto = memberService.updateMember(id, memberDto);
@@ -40,7 +47,9 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteMember(@PathVariable("id") Long id) throws NoDataFoundException{
-        return memberService.deleteMember(id);
+    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) throws NoDataFoundException{
+        String responseString = memberService.deleteMember(id);
+
+        return ResponseEntity.ok(responseString);
     }
 }

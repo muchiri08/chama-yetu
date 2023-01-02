@@ -86,4 +86,14 @@ public class MemberServiceImpl implements MemberService {
             return "Member with id " + id + " not deleted";
         }
     }
+
+    @Override
+    public MemberDto findMemberById(Long id) throws NoDataFoundException {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Member with ID " + id + " not found")
+        );
+        MemberDto responseDto = modelMapper.map(member, MemberDto.class);
+
+        return responseDto;
+    }
 }
