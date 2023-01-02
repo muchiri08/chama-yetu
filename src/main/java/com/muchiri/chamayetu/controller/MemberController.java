@@ -2,14 +2,15 @@ package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.MemberDto;
 import com.muchiri.chamayetu.entity.Member;
+import com.muchiri.chamayetu.exception.NoDataFoundException;
+import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -25,5 +26,11 @@ public class MemberController {
         MemberDto responseDto = memberService.createMember(memberDto);
 
         return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<MemberDto>> getAllMembers(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+        Page<MemberDto> members = memberService.getAllMembers(pageable);
+        return ResponseEntity.ok(members);
     }
 }
