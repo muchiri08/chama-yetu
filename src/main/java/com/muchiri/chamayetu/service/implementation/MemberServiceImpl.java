@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class MemberServiceImpl implements MemberService {
     private final ModelMapper modelMapper = new ModelMapper();
     private final MemberRepository memberRepository;
 
+    @Transactional
     @Override
     public MemberDto createMember(MemberDto memberDto) {
         Member member = modelMapper.map(memberDto, Member.class);
@@ -43,5 +45,26 @@ public class MemberServiceImpl implements MemberService {
 
         Page<MemberDto> memberDtos = members.map(member -> modelMapper.map(member, MemberDto.class));
         return memberDtos;
+    }
+
+    @Transactional
+    @Override
+    public MemberDto updateMember(Long id, MemberDto memberDto) throws NoDataFoundException {
+        Member member = memberRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Member with ID " + id + " not found")
+        );
+        member.setFirstName(memberDto.getFirstName());
+        member.setLastName(memberDto.getLastName());
+        member.setDateOfBirth(memberDto.getDateOfBirth());
+        member.setEmailAddress(memberDto.getEmailAddress());
+        member.setGender(memberDto.getGender());
+        member.setPhoneNumber(memberDto.getPhoneNumber());
+        member.setLocation(memberDto.getLocation());
+        member.setOccupation(memberDto.getOccupation());
+
+        Member updatedMember = memberRepository.save(member);
+        MemberDto responseDto = modelMapper.map(updatedMember, MemberDto.class);
+
+        return responseDto;
     }
 }

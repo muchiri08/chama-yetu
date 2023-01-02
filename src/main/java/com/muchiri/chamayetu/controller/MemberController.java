@@ -33,4 +33,11 @@ public class MemberController {
         Page<MemberDto> members = memberService.getAllMembers(pageable);
         return ResponseEntity.ok(members);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MemberDto> updateMember(@PathVariable("id") Long id, @RequestBody @Valid MemberDto memberDto) throws NoDataFoundException {
+        MemberDto responseDto = memberService.updateMember(id, memberDto);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }
