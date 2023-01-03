@@ -1,5 +1,6 @@
 package com.muchiri.chamayetu.advice;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,14 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(NoDataFoundException.class)
     public Map<String, String> handleNoDataFoundException(NoDataFoundException noDataFoundException){
         errorMap.put("message", noDataFoundException.getMessage());
+
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidFormatException.class)
+    public Map<String, String> handleInvalidFormatException(InvalidFormatException invalidFormatException){
+        errorMap.put("message", "Invalid datetime format");
 
         return errorMap;
     }

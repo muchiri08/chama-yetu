@@ -83,4 +83,27 @@ public class ContributionServiceImpl implements ContributionService {
 
         return contributionDto;
     }
+
+    @Transactional
+    @Override
+    public ContributionDto updateContribution(Long id, ContributionDto contributionDto) throws NoDataFoundException {
+        Contribution contribution = contributionRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Contribution with ID " + id +" not found")
+        );
+
+        MemberDto memberDto = memberService.findMemberById(contributionDto.getMemberId());
+        Member member = modelMapper.map(memberDto, Member.class);
+
+        contribution.setMember(member);
+        contribution.setAmount(contributionDto.getAmount());
+        contribution.setDateTime(contributionDto.getDateTime());
+
+        ContributionDto responseDto = new ContributionDto();
+        responseDto.setId(contribution.getId());
+        responseDto.setMemberId(contribution.getMember().getId());
+        responseDto.setAmount(contribution.getAmount());
+        responseDto.setDateTime(contribution.getDateTime());
+
+        return responseDto;
+    }
 }

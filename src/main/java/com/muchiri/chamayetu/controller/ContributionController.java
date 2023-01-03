@@ -38,4 +38,11 @@ public class ContributionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ContributionDto> updateContribution(@PathVariable("id") Long id, @RequestBody @Valid ContributionDto contributionDto) throws NoDataFoundException {
+        ContributionDto responseDto = contributionService.updateContribution(id, contributionDto);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }
