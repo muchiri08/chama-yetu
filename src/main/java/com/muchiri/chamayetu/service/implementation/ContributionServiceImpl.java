@@ -69,4 +69,18 @@ public class ContributionServiceImpl implements ContributionService {
 
         return contributionDtos;
     }
+
+    @Override
+    public ContributionDto findContributionById(Long id) throws NoDataFoundException {
+        Contribution contribution = contributionRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Contribution with ID " + id + " not found")
+        );
+        ContributionDto contributionDto = new ContributionDto();
+        contributionDto.setId(contribution.getId());
+        contributionDto.setMemberId(contribution.getMember().getId());
+        contributionDto.setAmount(contribution.getAmount());
+        contributionDto.setDateTime(contribution.getDateTime());
+
+        return contributionDto;
+    }
 }

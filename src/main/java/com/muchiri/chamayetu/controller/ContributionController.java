@@ -31,4 +31,11 @@ public class ContributionController {
 
         return ResponseEntity.ok(responseDtos);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ContributionDto> findContributionById(@PathVariable("id") Long id) throws NoDataFoundException {
+        ContributionDto responseDto = contributionService.findContributionById(id);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }
