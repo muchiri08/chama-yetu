@@ -28,8 +28,8 @@ public class Contribution implements Serializable {
             generator = "contribution_sequence"
     )
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "member_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     private BigDecimal amount;

@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -13,8 +16,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ContributionDto {
     private Long id;
-    private MemberDto member;
+
+    @NotNull
+    private Long memberId;
+    @NotNull
+    @Positive
     private BigDecimal amount;
+    @NotNull
     private LocalDateTime dateTime;
 
 }

@@ -47,7 +47,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) throws NoDataFoundException{
+    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) throws NoDataFoundException {
         String responseString = memberService.deleteMember(id);
 
         return ResponseEntity.ok(responseString);

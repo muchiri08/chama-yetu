@@ -57,11 +57,11 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(Exception.class)
-    public Map<String, String> handleAnyException(Exception exception){
-        errorMap.put("message", exception.getMessage());
-        return errorMap;
-    }
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(Exception.class)
+//    public Map<String, String> handleAnyException(Exception exception){
+//        errorMap.put("message", exception.getMessage());
+//        return errorMap;
+//    }
 
 }
