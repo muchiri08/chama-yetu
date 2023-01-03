@@ -4,6 +4,7 @@ import com.muchiri.chamayetu.dto.ContributionDto;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.service.interfaces.ContributionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,9 @@ public class ContributionController {
     private final ContributionService contributionService;
 
     @PostMapping("/create")
-    public ContributionDto contributionDto(@RequestBody @Valid ContributionDto contributionDto) throws NoDataFoundException {
+    public ResponseEntity<ContributionDto> createContribution(@RequestBody @Valid ContributionDto contributionDto) throws NoDataFoundException {
         ContributionDto responseDto = contributionService.createContribution(contributionDto);
 
-        return responseDto;
+        return ResponseEntity.ok(responseDto);
     }
 }
