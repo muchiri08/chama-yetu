@@ -45,4 +45,11 @@ public class ContributionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteContribution(@PathVariable("id") Long id) throws NoDataFoundException {
+        String responseString = contributionService.deleteContribution(id);
+
+        return ResponseEntity.ok(responseString);
+    }
 }

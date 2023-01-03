@@ -11,4 +11,5 @@ public interface ContributionService {
     Page<ContributionDto> getAllContributions(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     ContributionDto findContributionById(Long id) throws NoDataFoundException;
     ContributionDto updateContribution(Long id, ContributionDto contributionDto) throws NoDataFoundException;
+    String deleteContribution(Long id) throws NoDataFoundException;
 }

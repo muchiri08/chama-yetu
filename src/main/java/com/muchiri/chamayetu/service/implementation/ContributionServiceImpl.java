@@ -10,6 +10,7 @@ import com.muchiri.chamayetu.repository.ContributionRepository;
 import com.muchiri.chamayetu.service.interfaces.ContributionService;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ContributionServiceImpl implements ContributionService {
     private final MemberService memberService;
     private final ContributionRepository contributionRepository;
@@ -54,7 +56,7 @@ public class ContributionServiceImpl implements ContributionService {
         if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
             throw new PageNotFoundException("Invalid Page Size or Page Number");
         }
-        if (contributions.getNumberOfElements() == 0){
+        if (contributions.getNumberOfElements() == 0) {
             throw new NoDataFoundException("No Data Found!");
         }
 
@@ -88,7 +90,7 @@ public class ContributionServiceImpl implements ContributionService {
     @Override
     public ContributionDto updateContribution(Long id, ContributionDto contributionDto) throws NoDataFoundException {
         Contribution contribution = contributionRepository.findById(id).orElseThrow(
-                () -> new NoDataFoundException("Contribution with ID " + id +" not found")
+                () -> new NoDataFoundException("Contribution with ID " + id + " not found")
         );
 
         MemberDto memberDto = memberService.findMemberById(contributionDto.getMemberId());
@@ -105,5 +107,23 @@ public class ContributionServiceImpl implements ContributionService {
         responseDto.setDateTime(contribution.getDateTime());
 
         return responseDto;
+    }
+
+    @Transactional
+    @Override
+    public String deleteContribution(Long id) throws NoDataFoundException {
+        Contribution contribution = contributionRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Contribution with ID " + id + " not found")
+        );
+
+        contributionRepository.delete(contribution);
+        Contribution deletedContribution = contributionRepository.findById(id).orElse(null);
+
+        if (deletedContribution == null) {
+            return "Contribution deleted successfully";
+        } else {
+            log.error("Contribution with ID " + id + " not deleted");
+            return "Contribution with ID " + id + " not deleted";
+        }
     }
 }
