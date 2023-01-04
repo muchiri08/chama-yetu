@@ -96,4 +96,14 @@ public class MemberServiceImpl implements MemberService {
 
         return responseDto;
     }
+
+    @Override
+    public Boolean checkMemberById(Long id) {
+        Member member = memberRepository.findById(id).orElse(null);
+        if (member == null){
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

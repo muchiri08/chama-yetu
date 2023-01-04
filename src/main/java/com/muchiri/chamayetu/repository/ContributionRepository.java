@@ -15,4 +15,7 @@ public interface ContributionRepository extends JpaRepository<Contribution, Long
     Page<Contribution> findAll(Pageable pageable);
     @Query("SELECT c FROM Contribution c WHERE c.dateTime BETWEEN :fromDate AND :toDate")
     Page<Contribution> findContributionByDateTimeBetween(@Param("fromDate") LocalDateTime fromDate, @Param("toDate") LocalDateTime toDate, Pageable pageable);
+
+    @Query("SELECT c FROM Contribution c WHERE c.member.id = :id")
+    Page<Contribution> findByMemberId(@Param("id") Long id, Pageable pageable);
 }

@@ -61,4 +61,11 @@ public class ContributionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/member/{id}")
+    public ResponseEntity<Page<ContributionDto>> findContributionByMemberId(@PathVariable("id") Long id, Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+        Page<ContributionDto> responseDto = contributionService.findByMemberId(id, pageable);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

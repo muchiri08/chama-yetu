@@ -63,9 +63,7 @@ public class ContributionServiceImpl implements ContributionService {
             throw new NoDataFoundException("No Data Found!");
         }
 
-        Page<ContributionDto> contributionDtos = contributions.map(this::mapContributionToContributionDto);
-
-        return contributionDtos;
+        return contributions.map(this::mapContributionToContributionDto);
     }
 
     @Override
@@ -130,17 +128,33 @@ public class ContributionServiceImpl implements ContributionService {
         Page<Contribution> contributions = contributionRepository.findContributionByDateTimeBetween(fromDateTime, toDateTime, pageable);
         int totalPages = contributions.getTotalPages();
 
-        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages){
+        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
             throw new PageNotFoundException("Invalid Page Size or Page Number");
         }
 
-        if (contributions.getNumberOfElements() == 0){
+        if (contributions.getNumberOfElements() == 0) {
             throw new NoDataFoundException("No Data Found");
         }
 
-        Page<ContributionDto> contributionDtos = contributions.map(this::mapContributionToContributionDto);
+        return contributions.map(this::mapContributionToContributionDto);
+    }
 
-        return contributionDtos;
+    @Override
+    public Page<ContributionDto> findByMemberId(Long id, Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+        if (!memberService.checkMemberById(id)) throw new NoDataFoundException("Member with ID " + id + " not found");
+
+        Page<Contribution> memberContributions = contributionRepository.findByMemberId(id, pageable);
+        int totalPages = memberContributions.getTotalPages();
+
+        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
+            throw new PageNotFoundException("Invalid Page Size or Page Number");
+        }
+
+        if (memberContributions.getNumberOfElements() == 0) {
+            throw new NoDataFoundException("No Data Found");
+        }
+
+        return memberContributions.map(this::mapContributionToContributionDto);
     }
 
     private ContributionDto mapContributionToContributionDto(Contribution contribution) {

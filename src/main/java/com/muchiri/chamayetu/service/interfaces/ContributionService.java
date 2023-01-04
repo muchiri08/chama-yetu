@@ -15,4 +15,5 @@ public interface ContributionService {
     ContributionDto updateContribution(Long id, ContributionDto contributionDto) throws NoDataFoundException;
     String deleteContribution(Long id) throws NoDataFoundException;
     Page<ContributionDto> findContributionByDateTimeBetween(LocalDate fromDate, LocalDate toDate, Pageable pageable) throws PageNotFoundException, NoDataFoundException;
+    Page<ContributionDto> findByMemberId(Long id, Pageable pageable) throws PageNotFoundException, NoDataFoundException;
 }

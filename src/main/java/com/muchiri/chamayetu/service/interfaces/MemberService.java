@@ -13,4 +13,6 @@ public interface MemberService {
     String deleteMember(Long id) throws NoDataFoundException;
     MemberDto findMemberById(Long id) throws NoDataFoundException;
 
+    Boolean checkMemberById(Long id);
+
 }
