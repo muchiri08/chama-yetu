@@ -6,10 +6,13 @@ import com.muchiri.chamayetu.exception.PageNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
+
 public interface ContributionService {
     ContributionDto createContribution(ContributionDto contributionDto) throws NoDataFoundException;
     Page<ContributionDto> getAllContributions(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     ContributionDto findContributionById(Long id) throws NoDataFoundException;
     ContributionDto updateContribution(Long id, ContributionDto contributionDto) throws NoDataFoundException;
     String deleteContribution(Long id) throws NoDataFoundException;
+    Page<ContributionDto> findContributionByDateTimeBetween(LocalDate fromDate, LocalDate toDate, Pageable pageable) throws PageNotFoundException, NoDataFoundException;
 }

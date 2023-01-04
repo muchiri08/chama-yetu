@@ -17,6 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -60,14 +63,7 @@ public class ContributionServiceImpl implements ContributionService {
             throw new NoDataFoundException("No Data Found!");
         }
 
-        Page<ContributionDto> contributionDtos = contributions.map(contribution -> {
-            ContributionDto contributionDto = new ContributionDto();
-            contributionDto.setId(contribution.getId());
-            contributionDto.setMemberId(contribution.getMember().getId());
-            contributionDto.setAmount(contribution.getAmount());
-            contributionDto.setDateTime(contribution.getDateTime());
-            return contributionDto;
-        });
+        Page<ContributionDto> contributionDtos = contributions.map(this::mapContributionToContributionDto);
 
         return contributionDtos;
     }
@@ -126,4 +122,34 @@ public class ContributionServiceImpl implements ContributionService {
             return "Contribution with ID " + id + " not deleted";
         }
     }
+
+    @Override
+    public Page<ContributionDto> findContributionByDateTimeBetween(LocalDate fromDate, LocalDate toDate, Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+        LocalDateTime fromDateTime = fromDate.atStartOfDay();
+        LocalDateTime toDateTime = toDate.atTime(23, 59, 59);
+        Page<Contribution> contributions = contributionRepository.findContributionByDateTimeBetween(fromDateTime, toDateTime, pageable);
+        int totalPages = contributions.getTotalPages();
+
+        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages){
+            throw new PageNotFoundException("Invalid Page Size or Page Number");
+        }
+
+        if (contributions.getNumberOfElements() == 0){
+            throw new NoDataFoundException("No Data Found");
+        }
+
+        Page<ContributionDto> contributionDtos = contributions.map(this::mapContributionToContributionDto);
+
+        return contributionDtos;
+    }
+
+    private ContributionDto mapContributionToContributionDto(Contribution contribution) {
+        ContributionDto contributionDto = new ContributionDto();
+        contributionDto.setId(contribution.getId());
+        contributionDto.setMemberId(contribution.getMember().getId());
+        contributionDto.setAmount(contribution.getAmount());
+        contributionDto.setDateTime(contribution.getDateTime());
+        return contributionDto;
+    }
+
 }

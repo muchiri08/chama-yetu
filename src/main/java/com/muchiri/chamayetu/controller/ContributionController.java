@@ -7,10 +7,12 @@ import com.muchiri.chamayetu.service.interfaces.ContributionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -51,5 +53,12 @@ public class ContributionController {
         String responseString = contributionService.deleteContribution(id);
 
         return ResponseEntity.ok(responseString);
+    }
+
+    @GetMapping("/daterange/{fromDate}/{toDate}")
+    public ResponseEntity<Page<ContributionDto>> findContributionByDateTimeBetween(@PathVariable("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate, @PathVariable("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate, Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+        Page<ContributionDto> responseDto = contributionService.findContributionByDateTimeBetween(fromDate, toDate, pageable);
+
+        return ResponseEntity.ok(responseDto);
     }
 }
