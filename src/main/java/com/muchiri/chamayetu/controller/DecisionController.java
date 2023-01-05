@@ -1,6 +1,7 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.DecisionDto;
+import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.service.interfaces.DecisionService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,7 @@ public class DecisionController {
     private final DecisionService decisionService;
 
     @PostMapping("/create")
-    public ResponseEntity<DecisionDto> createDecision(@RequestBody @Valid DecisionDto decisionDto) throws NoDataFoundException {
+    public ResponseEntity<DecisionDto> createDecision(@RequestBody @Valid DecisionDto decisionDto) throws MemberNotFoundException {
         DecisionDto responseDto = decisionService.createDecision(decisionDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);

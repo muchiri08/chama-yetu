@@ -4,6 +4,7 @@ import com.muchiri.chamayetu.dto.DecisionDto;
 import com.muchiri.chamayetu.dto.MemberDto;
 import com.muchiri.chamayetu.entity.Decision;
 import com.muchiri.chamayetu.entity.Member;
+import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.repository.DecisionRepository;
 import com.muchiri.chamayetu.service.interfaces.DecisionService;
@@ -27,20 +28,20 @@ public class DecisionServiceImpl implements DecisionService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public DecisionDto createDecision(DecisionDto decisionDto) throws NoDataFoundException {
+    public DecisionDto createDecision(DecisionDto decisionDto) throws MemberNotFoundException {
         Decision decision = new Decision();
         decision.setDescription(decisionDto.getDescription());
         decision.setStatus(decisionDto.getStatus());
         decision.setDateTime(decisionDto.getDateTime());
 
         Set<Long> memberIds = decisionDto.getMemberIds();
-        if (memberIds.isEmpty()) throw new NoDataFoundException("No member ids' found");
+        if (memberIds.isEmpty()) throw new MemberNotFoundException("No member ids' found");
 
         Set<Member> members = memberIds.stream().map(memberId -> {
             MemberDto memberDto = null;
             try {
                 memberDto = memberService.findMemberById(memberId);
-            } catch (NoDataFoundException e) {
+            } catch (MemberNotFoundException e) {
                 log.error(e.getMessage());
                 throw new RuntimeException(e);
             }

@@ -1,6 +1,7 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.MemberDto;
+import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
@@ -27,27 +28,27 @@ public class MemberController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<MemberDto>> getAllMembers(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+    public ResponseEntity<Page<MemberDto>> getAllMembers(Pageable pageable) throws PageNotFoundException, MemberNotFoundException {
         Page<MemberDto> members = memberService.getAllMembers(pageable);
         return ResponseEntity.ok(members);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MemberDto> findMemberById(@PathVariable("id") Long id) throws NoDataFoundException {
+    public ResponseEntity<MemberDto> findMemberById(@PathVariable("id") Long id) throws MemberNotFoundException {
         MemberDto memberDto = memberService.findMemberById(id);
 
         return ResponseEntity.ok(memberDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MemberDto> updateMember(@PathVariable("id") Long id, @RequestBody @Valid MemberDto memberDto) throws NoDataFoundException {
+    public ResponseEntity<MemberDto> updateMember(@PathVariable("id") Long id, @RequestBody @Valid MemberDto memberDto) throws MemberNotFoundException {
         MemberDto responseDto = memberService.updateMember(id, memberDto);
 
         return ResponseEntity.ok(responseDto);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) throws NoDataFoundException {
+    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) throws MemberNotFoundException {
         String responseString = memberService.deleteMember(id);
 
         return ResponseEntity.ok(responseString);

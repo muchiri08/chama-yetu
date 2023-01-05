@@ -1,6 +1,7 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.ContributionDto;
+import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.ContributionService;
@@ -21,7 +22,7 @@ public class ContributionController {
     private final ContributionService contributionService;
 
     @PostMapping("/create")
-    public ResponseEntity<ContributionDto> createContribution(@RequestBody @Valid ContributionDto contributionDto) throws NoDataFoundException {
+    public ResponseEntity<ContributionDto> createContribution(@RequestBody @Valid ContributionDto contributionDto) throws MemberNotFoundException {
         ContributionDto responseDto = contributionService.createContribution(contributionDto);
 
         return ResponseEntity.ok(responseDto);
@@ -42,7 +43,7 @@ public class ContributionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ContributionDto> updateContribution(@PathVariable("id") Long id, @RequestBody @Valid ContributionDto contributionDto) throws NoDataFoundException {
+    public ResponseEntity<ContributionDto> updateContribution(@PathVariable("id") Long id, @RequestBody @Valid ContributionDto contributionDto) throws MemberNotFoundException {
         ContributionDto responseDto = contributionService.updateContribution(id, contributionDto);
 
         return ResponseEntity.ok(responseDto);

@@ -1,6 +1,7 @@
 package com.muchiri.chamayetu.advice;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -37,22 +38,30 @@ public class ApplicationExceptionHandler {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public Map<String, String> handleEmptyResultDataAccessException(EmptyResultDataAccessException emptyResultDataAccessException){
+    public Map<String, String> handleEmptyResultDataAccessException(EmptyResultDataAccessException emptyResultDataAccessException) {
         errorMap.put("message", emptyResultDataAccessException.getMessage());
         return errorMap;
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(PageNotFoundException.class)
-    public Map<String, String> handlePageNotFoundException(PageNotFoundException pageNotFoundException){
+    public Map<String, String> handlePageNotFoundException(PageNotFoundException pageNotFoundException) {
         errorMap.put("message", pageNotFoundException.getMessage());
 
         return errorMap;
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MemberNotFoundException.class)
+    public Map<String, String> handleMemberNotFoundException(MemberNotFoundException memberNotFoundException) {
+        errorMap.put("message", memberNotFoundException.getMessage());
+
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoDataFoundException.class)
-    public Map<String, String> handleNoDataFoundException(NoDataFoundException noDataFoundException){
+    public Map<String, String> handleNoDataFoundException(NoDataFoundException noDataFoundException) {
         errorMap.put("message", noDataFoundException.getMessage());
 
         return errorMap;
@@ -60,7 +69,7 @@ public class ApplicationExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidFormatException.class)
-    public Map<String, String> handleInvalidFormatException(InvalidFormatException invalidFormatException){
+    public Map<String, String> handleInvalidFormatException(InvalidFormatException invalidFormatException) {
         errorMap.put("message", "Invalid datetime format");
 
         return errorMap;

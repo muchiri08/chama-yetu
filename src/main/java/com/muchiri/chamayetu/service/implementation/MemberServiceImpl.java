@@ -2,6 +2,7 @@ package com.muchiri.chamayetu.service.implementation;
 
 import com.muchiri.chamayetu.dto.MemberDto;
 import com.muchiri.chamayetu.entity.Member;
+import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.repository.MemberRepository;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
@@ -32,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Page<MemberDto> getAllMembers(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+    public Page<MemberDto> getAllMembers(Pageable pageable) throws PageNotFoundException, MemberNotFoundException {
         Page<Member> members = memberRepository.findAll(pageable);
         int totalPages = members.getTotalPages();
 
@@ -41,7 +42,7 @@ public class MemberServiceImpl implements MemberService {
         }
 
         if (members.getNumberOfElements() == 0) {
-            throw new NoDataFoundException("No Data Found");
+            throw new MemberNotFoundException("No Members Found");
         }
 
         Page<MemberDto> memberDtos = members.map(member -> modelMapper.map(member, MemberDto.class));
@@ -50,9 +51,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public MemberDto updateMember(Long id, MemberDto memberDto) throws NoDataFoundException {
+    public MemberDto updateMember(Long id, MemberDto memberDto) throws MemberNotFoundException {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new NoDataFoundException("Member with ID " + id + " not found")
+                () -> new MemberNotFoundException("Member with ID " + id + " not found")
         );
         member.setFirstName(memberDto.getFirstName());
         member.setLastName(memberDto.getLastName());
@@ -71,9 +72,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public String deleteMember(Long id) throws NoDataFoundException {
+    public String deleteMember(Long id) throws MemberNotFoundException {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new NoDataFoundException("Member with ID " + id + " not found")
+                () -> new MemberNotFoundException("Member with ID " + id + " not found")
         );
         memberRepository.delete(member);
 
@@ -88,9 +89,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberDto findMemberById(Long id) throws NoDataFoundException {
+    public MemberDto findMemberById(Long id) throws MemberNotFoundException {
         Member member = memberRepository.findById(id).orElseThrow(
-                () -> new NoDataFoundException("Member with ID " + id + " not found")
+                () -> new MemberNotFoundException("Member with ID " + id + " not found")
         );
         MemberDto responseDto = modelMapper.map(member, MemberDto.class);
 

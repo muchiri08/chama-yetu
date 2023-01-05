@@ -4,6 +4,7 @@ import com.muchiri.chamayetu.dto.ContributionDto;
 import com.muchiri.chamayetu.dto.MemberDto;
 import com.muchiri.chamayetu.entity.Contribution;
 import com.muchiri.chamayetu.entity.Member;
+import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.repository.ContributionRepository;
@@ -30,7 +31,7 @@ public class ContributionServiceImpl implements ContributionService {
 
     @Transactional
     @Override
-    public ContributionDto createContribution(ContributionDto contributionDto) throws NoDataFoundException {
+    public ContributionDto createContribution(ContributionDto contributionDto) throws MemberNotFoundException {
         Long memberId = contributionDto.getMemberId();
         MemberDto memberDto = memberService.findMemberById(memberId);
 
@@ -82,9 +83,9 @@ public class ContributionServiceImpl implements ContributionService {
 
     @Transactional
     @Override
-    public ContributionDto updateContribution(Long id, ContributionDto contributionDto) throws NoDataFoundException {
+    public ContributionDto updateContribution(Long id, ContributionDto contributionDto) throws MemberNotFoundException {
         Contribution contribution = contributionRepository.findById(id).orElseThrow(
-                () -> new NoDataFoundException("Contribution with ID " + id + " not found")
+                () -> new MemberNotFoundException("Contribution with ID " + id + " not found")
         );
 
         MemberDto memberDto = memberService.findMemberById(contributionDto.getMemberId());
