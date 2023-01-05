@@ -26,14 +26,14 @@ public class ContributionController {
     public ResponseEntity<ContributionDto> createContribution(@RequestBody @Valid ContributionDto contributionDto) throws MemberNotFoundException {
         ContributionDto responseDto = contributionService.createContribution(contributionDto);
 
-        return ResponseEntity.ok(responseDto);
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<Page<ContributionDto>> getAllContributions(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
         Page<ContributionDto> responseDtos = contributionService.getAllContributions(pageable);
 
-        return new ResponseEntity<>(responseDtos, HttpStatus.CREATED);
+        return ResponseEntity.ok(responseDtos);
     }
 
     @GetMapping("/{id}")
