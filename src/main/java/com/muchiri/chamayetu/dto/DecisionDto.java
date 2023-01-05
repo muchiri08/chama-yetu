@@ -27,5 +27,5 @@ public class DecisionDto {
     @NotNull
     private LocalDateTime dateTime;
     @NotNull
-    private Member member;
+    private Long memberId;
 }
