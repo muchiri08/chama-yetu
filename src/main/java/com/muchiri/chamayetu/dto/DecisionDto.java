@@ -10,6 +10,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
@@ -17,9 +19,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class DecisionDto {
     private Long id;
+    @NotBlank
     private String description;
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     private Status status;
+    @NotNull
     private LocalDateTime dateTime;
-    private MemberDto member;
+    @NotNull
+    private Member member;
 }
