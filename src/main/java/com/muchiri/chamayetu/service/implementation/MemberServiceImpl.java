@@ -3,7 +3,7 @@ package com.muchiri.chamayetu.service.implementation;
 import com.muchiri.chamayetu.dto.MemberDto;
 import com.muchiri.chamayetu.entity.Member;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
-import com.muchiri.chamayetu.exception.NoDataFoundException;
+import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.repository.MemberRepository;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.muchiri.chamayetu.exception.PageNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service

@@ -2,7 +2,6 @@ package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.MemberDto;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
-import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
