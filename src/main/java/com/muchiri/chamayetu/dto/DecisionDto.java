@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -27,5 +28,5 @@ public class DecisionDto {
     @NotNull
     private LocalDateTime dateTime;
     @NotNull
-    private Long memberId;
+    private Set<Long> memberIds;
 }

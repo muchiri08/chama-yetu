@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "decisions")
@@ -33,7 +34,10 @@ public class Decision implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Status status;
     private LocalDateTime dateTime;
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "decision_id"),
+            inverseJoinColumns = @JoinColumn(name = "member_id")
+    )
+    private Set<Member> members;
 }

@@ -9,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity(name = "members")
 @Data
@@ -38,8 +39,8 @@ public class Member implements Serializable {
     private String location;
     @OneToMany(mappedBy = "member")
     private List<Contribution> contributions;
-    @OneToMany(mappedBy = "member")
-    private List<Decision> decisions;
+    @ManyToMany(mappedBy = "members")
+    private Set<Decision> decisions;
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 }
