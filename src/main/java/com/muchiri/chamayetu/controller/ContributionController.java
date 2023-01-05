@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class ContributionController {
     public ResponseEntity<Page<ContributionDto>> getAllContributions(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
         Page<ContributionDto> responseDtos = contributionService.getAllContributions(pageable);
 
-        return ResponseEntity.ok(responseDtos);
+        return new ResponseEntity<>(responseDtos, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
