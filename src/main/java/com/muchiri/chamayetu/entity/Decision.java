@@ -1,5 +1,6 @@
 package com.muchiri.chamayetu.entity;
 
+import com.muchiri.chamayetu.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,8 @@ public class Decision implements Serializable {
     )
     private Long id;
     private String description;
+    @Enumerated(value = EnumType.STRING)
+    private Status status;
     private LocalDateTime dateTime;
     @ManyToOne
     @JoinColumn(name = "member_id")
