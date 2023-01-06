@@ -6,12 +6,15 @@ import com.muchiri.chamayetu.entity.Decision;
 import com.muchiri.chamayetu.entity.Member;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
+import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.repository.DecisionRepository;
 import com.muchiri.chamayetu.service.interfaces.DecisionService;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -53,6 +56,21 @@ public class DecisionServiceImpl implements DecisionService {
         decisionRepository.save(decision);
 
         return decisionToDecisionDto(decision);
+    }
+
+    @Override
+    public Page<DecisionDto> getAllDecisions(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+        Page<Decision> decisions = decisionRepository.findAll(pageable);
+        int totalPages = decisions.getTotalPages();
+
+        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages){
+            throw new PageNotFoundException("Invalid Page Size or Page Number");
+        }
+        if (decisions.getNumberOfElements() == 0){
+            throw new NoDataFoundException("No Data Found!");
+        }
+
+        return decisions.map(this::decisionToDecisionDto);
     }
 
     private DecisionDto decisionToDecisionDto(Decision decision) {

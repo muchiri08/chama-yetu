@@ -39,8 +39,6 @@ public class Member implements Serializable {
     private String location;
     @OneToMany(mappedBy = "member")
     private List<Contribution> contributions;
-    @ManyToMany(mappedBy = "members")
-    private Set<Decision> decisions;
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 }

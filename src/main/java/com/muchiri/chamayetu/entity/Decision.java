@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,7 +32,7 @@ public class Decision implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private Status status;
     private LocalDateTime dateTime;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             joinColumns = @JoinColumn(name = "decision_id"),
             inverseJoinColumns = @JoinColumn(name = "member_id")
