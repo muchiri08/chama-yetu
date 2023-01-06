@@ -33,4 +33,11 @@ public class DecisionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DecisionDto> findDecisionById(@PathVariable("id") Long id) throws NoDataFoundException {
+        DecisionDto responseDto = decisionService.findDecisionById(id);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

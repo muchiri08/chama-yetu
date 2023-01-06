@@ -16,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,6 +31,7 @@ public class DecisionServiceImpl implements DecisionService {
     private final MemberService memberService;
     private final ModelMapper modelMapper = new ModelMapper();
 
+    @Transactional
     @Override
     public DecisionDto createDecision(DecisionDto decisionDto) throws MemberNotFoundException {
         Decision decision = new Decision();
@@ -71,6 +73,15 @@ public class DecisionServiceImpl implements DecisionService {
         }
 
         return decisions.map(this::decisionToDecisionDto);
+    }
+
+    @Override
+    public DecisionDto findDecisionById(Long id) throws NoDataFoundException {
+        Decision decision = decisionRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Decision with ID "+id+" not found!")
+        );
+
+        return decisionToDecisionDto(decision);
     }
 
     private DecisionDto decisionToDecisionDto(Decision decision) {
