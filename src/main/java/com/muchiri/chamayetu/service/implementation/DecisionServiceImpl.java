@@ -42,17 +42,7 @@ public class DecisionServiceImpl implements DecisionService {
         Set<Long> memberIds = decisionDto.getMemberIds();
         if (memberIds.isEmpty()) throw new MemberNotFoundException("No member ids' found");
 
-        Set<Member> members = memberIds.stream().map(memberId -> {
-            MemberDto memberDto = null;
-            try {
-                memberDto = memberService.findMemberById(memberId);
-            } catch (MemberNotFoundException e) {
-                log.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
-            Member member = modelMapper.map(memberDto, Member.class);
-            return member;
-        }).collect(Collectors.toSet());
+        Set<Member> members = getMembersByIds(memberIds);
 
         decision.setMembers(members);
         decisionRepository.save(decision);
@@ -96,7 +86,14 @@ public class DecisionServiceImpl implements DecisionService {
         Set<Long> membersIds = decisionDto.getMemberIds();
         if (membersIds.isEmpty()) throw new MemberNotFoundException("No member Ids' found!");
 
-        Set<Member> members = membersIds.stream().map(memberId -> {
+        Set<Member> members = getMembersByIds(membersIds);
+
+        decision.setMembers(members);
+        return decisionToDecisionDto(decision);
+    }
+
+    private Set<Member> getMembersByIds(Set<Long> ids) {
+        Set<Member> members = ids.stream().map(memberId -> {
             MemberDto memberDto = null;
             try {
                 memberDto = memberService.findMemberById(memberId);
@@ -108,8 +105,7 @@ public class DecisionServiceImpl implements DecisionService {
             return member;
         }).collect(Collectors.toSet());
 
-        decision.setMembers(members);
-        return decisionToDecisionDto(decision);
+        return members;
     }
 
     private DecisionDto decisionToDecisionDto(Decision decision) {
