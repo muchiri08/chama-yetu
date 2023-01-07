@@ -70,7 +70,7 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidFormatException.class)
     public Map<String, String> handleInvalidFormatException(InvalidFormatException invalidFormatException) {
-        errorMap.put("message", "Invalid format. Check the format of your input(s)");
+        errorMap.put("message", "Invalid format for field "+invalidFormatException.getPath().get(0).getFieldName());
 
         return errorMap;
     }
