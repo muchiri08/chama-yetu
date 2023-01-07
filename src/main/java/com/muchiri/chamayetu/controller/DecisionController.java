@@ -40,4 +40,11 @@ public class DecisionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<DecisionDto> updateDecision(@PathVariable("id") Long id, @RequestBody @Valid DecisionDto decisionDto) throws NoDataFoundException, MemberNotFoundException {
+        DecisionDto responseDto = decisionService.updateDecision(id, decisionDto);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

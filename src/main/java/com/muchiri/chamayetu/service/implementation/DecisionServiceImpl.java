@@ -65,10 +65,10 @@ public class DecisionServiceImpl implements DecisionService {
         Page<Decision> decisions = decisionRepository.findAll(pageable);
         int totalPages = decisions.getTotalPages();
 
-        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages){
+        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
             throw new PageNotFoundException("Invalid Page Size or Page Number");
         }
-        if (decisions.getNumberOfElements() == 0){
+        if (decisions.getNumberOfElements() == 0) {
             throw new NoDataFoundException("No Data Found!");
         }
 
@@ -78,9 +78,37 @@ public class DecisionServiceImpl implements DecisionService {
     @Override
     public DecisionDto findDecisionById(Long id) throws NoDataFoundException {
         Decision decision = decisionRepository.findById(id).orElseThrow(
-                () -> new NoDataFoundException("Decision with ID "+id+" not found!")
+                () -> new NoDataFoundException("Decision with ID " + id + " not found!")
         );
 
+        return decisionToDecisionDto(decision);
+    }
+
+    @Override
+    public DecisionDto updateDecision(Long id, DecisionDto decisionDto) throws NoDataFoundException, MemberNotFoundException {
+        Decision decision = decisionRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Decision with ID " + id + " is not found!")
+        );
+        decision.setDescription(decisionDto.getDescription());
+        decision.setStatus(decisionDto.getStatus());
+        decision.setDateTime(decisionDto.getDateTime());
+
+        Set<Long> membersIds = decisionDto.getMemberIds();
+        if (membersIds.isEmpty()) throw new MemberNotFoundException("No member Ids' found!");
+
+        Set<Member> members = membersIds.stream().map(memberId -> {
+            MemberDto memberDto = null;
+            try {
+                memberDto = memberService.findMemberById(memberId);
+            } catch (MemberNotFoundException e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
+            Member member = modelMapper.map(memberDto, Member.class);
+            return member;
+        }).collect(Collectors.toSet());
+
+        decision.setMembers(members);
         return decisionToDecisionDto(decision);
     }
 
