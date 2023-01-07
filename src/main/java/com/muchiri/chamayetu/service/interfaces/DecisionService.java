@@ -12,4 +12,5 @@ public interface DecisionService {
     Page<DecisionDto> getAllDecisions(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     DecisionDto findDecisionById(Long id) throws NoDataFoundException;
     DecisionDto updateDecision(Long id, DecisionDto decisionDto) throws NoDataFoundException, MemberNotFoundException;
+    String deleteDecision(Long id) throws NoDataFoundException;
 }

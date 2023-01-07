@@ -92,6 +92,18 @@ public class DecisionServiceImpl implements DecisionService {
         return decisionToDecisionDto(decision);
     }
 
+    @Override
+    public String deleteDecision(Long id) throws NoDataFoundException {
+        Decision decision = decisionRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Decision with ID " + id + " is not found!")
+        );
+        decisionRepository.delete(decision);
+
+        Decision deletedDecision = decisionRepository.findById(id).orElse(null);
+
+        return deletedDecision == null ? "Deleted Successfully" : "Decision with ID " + id + " not deleted!";
+    }
+
     private Set<Member> getMembersByIds(Set<Long> ids) {
         Set<Member> members = ids.stream().map(memberId -> {
             MemberDto memberDto = null;

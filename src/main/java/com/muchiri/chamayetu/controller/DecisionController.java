@@ -47,4 +47,11 @@ public class DecisionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteContribution(@PathVariable("id") Long id) throws NoDataFoundException {
+        String responseString = decisionService.deleteDecision(id);
+
+        return ResponseEntity.ok(responseString);
+    }
 }
