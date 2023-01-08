@@ -14,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +56,9 @@ public class ContributionServiceImpl implements ContributionService {
 
     @Override
     public Page<ContributionDto> getAllContributions(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
-        Page<Contribution> contributions = contributionRepository.findAll(pageable);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Contribution> contributions = contributionRepository.findAll(sortedPageable);
         int totalPages = contributions.getTotalPages();
 
         if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
@@ -126,7 +130,9 @@ public class ContributionServiceImpl implements ContributionService {
     public Page<ContributionDto> findContributionByDateTimeBetween(LocalDate fromDate, LocalDate toDate, Pageable pageable) throws PageNotFoundException, NoDataFoundException {
         LocalDateTime fromDateTime = fromDate.atStartOfDay();
         LocalDateTime toDateTime = toDate.atTime(23, 59, 59);
-        Page<Contribution> contributions = contributionRepository.findContributionByDateTimeBetween(fromDateTime, toDateTime, pageable);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Contribution> contributions = contributionRepository.findContributionByDateTimeBetween(fromDateTime, toDateTime, sortedPageable);
         int totalPages = contributions.getTotalPages();
 
         if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
@@ -144,7 +150,9 @@ public class ContributionServiceImpl implements ContributionService {
     public Page<ContributionDto> findByMemberId(Long id, Pageable pageable) throws PageNotFoundException, NoDataFoundException {
         if (!memberService.checkMemberById(id)) throw new NoDataFoundException("Member with ID " + id + " not found");
 
-        Page<Contribution> memberContributions = contributionRepository.findByMemberId(id, pageable);
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Contribution> memberContributions = contributionRepository.findByMemberId(id, sortedPageable);
         int totalPages = memberContributions.getTotalPages();
 
         if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
