@@ -11,4 +11,5 @@ public interface MeetingService {
     MeetingDto createMeeting(MeetingDto meetingDto) throws MemberNotFoundException;
     Page<MeetingDto> getAllMeetings(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     MeetingDto findMeetingById(Long id) throws NoDataFoundException;
+    MeetingDto updateMeeting(Long id, MeetingDto meetingDto) throws NoDataFoundException, MemberNotFoundException;
 }

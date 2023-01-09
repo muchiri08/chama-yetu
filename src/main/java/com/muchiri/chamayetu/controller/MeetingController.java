@@ -39,4 +39,11 @@ public class MeetingController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MeetingDto> updateMeeting(@PathVariable("id") Long id, @RequestBody @Valid MeetingDto meetingDto) throws NoDataFoundException, MemberNotFoundException {
+        MeetingDto responseDto = meetingService.updateMeeting(id, meetingDto);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

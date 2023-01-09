@@ -73,6 +73,28 @@ public class MeetingServiceImpl implements MeetingService {
         return mapMeetingToMeetingDto(meeting);
     }
 
+    @Override
+    public MeetingDto updateMeeting(Long id, MeetingDto meetingDto) throws NoDataFoundException, MemberNotFoundException {
+        Meeting meeting = meetingRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Meeting with ID " + id + " is not found!")
+        );
+
+        meeting.setDate(meetingDto.getDate());
+        meeting.setTime(meetingDto.getTime());
+        meeting.setLocation(meetingDto.getLocation());
+        meeting.setNotes(meetingDto.getNotes());
+
+        Set<Long> memberIds = meetingDto.getMemberIds();
+        if (memberIds.isEmpty()) throw new MemberNotFoundException("No member ids found!");
+
+        Set<Member> members = memberService.getMembersByIds(memberIds);
+        meeting.setMembers(members);
+
+        meetingRepository.save(meeting);
+
+        return mapMeetingToMeetingDto(meeting);
+    }
+
     private MeetingDto mapMeetingToMeetingDto(Meeting meeting) {
         MeetingDto meetingDto = new MeetingDto();
         meetingDto.setId(meeting.getId());
