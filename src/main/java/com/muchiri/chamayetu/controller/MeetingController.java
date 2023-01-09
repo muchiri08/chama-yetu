@@ -32,4 +32,11 @@ public class MeetingController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<MeetingDto> findMeetingById(@PathVariable Long id) throws NoDataFoundException {
+        MeetingDto responseDto = meetingService.findMeetingById(id);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

@@ -64,6 +64,15 @@ public class MeetingServiceImpl implements MeetingService {
         return meetings.map(this::mapMeetingToMeetingDto);
     }
 
+    @Override
+    public MeetingDto findMeetingById(Long id) throws NoDataFoundException {
+        Meeting meeting = meetingRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Meeting with ID " + id + " not found!")
+        );
+
+        return mapMeetingToMeetingDto(meeting);
+    }
+
     private MeetingDto mapMeetingToMeetingDto(Meeting meeting) {
         MeetingDto meetingDto = new MeetingDto();
         meetingDto.setId(meeting.getId());
