@@ -4,11 +4,17 @@ import com.muchiri.chamayetu.dto.MeetingDto;
 import com.muchiri.chamayetu.entity.Meeting;
 import com.muchiri.chamayetu.entity.Member;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
+import com.muchiri.chamayetu.exception.NoDataFoundException;
+import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.repository.MeetingRepository;
 import com.muchiri.chamayetu.service.interfaces.MeetingService;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -39,6 +45,23 @@ public class MeetingServiceImpl implements MeetingService {
         meetingRepository.save(meeting);
 
         return mapMeetingToMeetingDto(meeting);
+    }
+
+    @Override
+    public Page<MeetingDto> getAllMeetings(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Meeting> meetings = meetingRepository.findAll(sortedPageable);
+        int totalPages = meetings.getTotalPages();
+
+        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
+            throw new PageNotFoundException("Invalid Page Size or Page Number");
+        }
+        if (meetings.getNumberOfElements() == 0) {
+            throw new NoDataFoundException("No Data Found!");
+        }
+
+        return meetings.map(this::mapMeetingToMeetingDto);
     }
 
     private MeetingDto mapMeetingToMeetingDto(Meeting meeting) {
