@@ -16,6 +16,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -109,5 +112,22 @@ public class MemberServiceImpl implements MemberService {
         } else {
             return true;
         }
+    }
+
+    @Override
+    public Set<Member> getMembersByIds(Set<Long> ids) {
+        Set<Member> members = ids.stream().map(memberId -> {
+            MemberDto memberDto = null;
+            try {
+                memberDto = findMemberById(memberId);
+            } catch (MemberNotFoundException e) {
+                log.error(e.getMessage());
+                throw new RuntimeException(e);
+            }
+            Member member = modelMapper.map(memberDto, Member.class);
+            return member;
+        }).collect(Collectors.toSet());
+
+        return members;
     }
 }

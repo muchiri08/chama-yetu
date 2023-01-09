@@ -1,7 +1,6 @@
 package com.muchiri.chamayetu.service.implementation;
 
 import com.muchiri.chamayetu.dto.MeetingDto;
-import com.muchiri.chamayetu.dto.MemberDto;
 import com.muchiri.chamayetu.entity.Meeting;
 import com.muchiri.chamayetu.entity.Member;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
@@ -10,7 +9,6 @@ import com.muchiri.chamayetu.service.interfaces.MeetingService;
 import com.muchiri.chamayetu.service.interfaces.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -23,7 +21,6 @@ public class MeetingServiceImpl implements MeetingService {
 
     private final MeetingRepository meetingRepository;
     private final MemberService memberService;
-    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public MeetingDto createMeeting(MeetingDto meetingDto) throws MemberNotFoundException {
@@ -36,28 +33,12 @@ public class MeetingServiceImpl implements MeetingService {
         Set<Long> memberIds = meetingDto.getMemberIds();
         if (memberIds.isEmpty()) throw new MemberNotFoundException("No member ids found!");
 
-        Set<Member> members = getMembersByIds(memberIds);
+        Set<Member> members = memberService.getMembersByIds(memberIds);
         meeting.setMembers(members);
 
         meetingRepository.save(meeting);
 
         return mapMeetingToMeetingDto(meeting);
-    }
-
-    private Set<Member> getMembersByIds(Set<Long> ids) {
-        Set<Member> members = ids.stream().map(memberId -> {
-            MemberDto memberDto = null;
-            try {
-                memberDto = memberService.findMemberById(memberId);
-            } catch (MemberNotFoundException e) {
-                log.error(e.getMessage());
-                throw new RuntimeException(e);
-            }
-            Member member = modelMapper.map(memberDto, Member.class);
-            return member;
-        }).collect(Collectors.toSet());
-
-        return members;
     }
 
     private MeetingDto mapMeetingToMeetingDto(Meeting meeting) {
