@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -17,10 +18,14 @@ import java.util.List;
 @AllArgsConstructor
 public class InvestmentDto {
     private Long id;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private InvestmentType type;
+    @NotNull
     private LocalDate date;
+    @NotNull
     private BigDecimal amountInvested;
+    @NotNull
     private BigDecimal returnOfInvestment;
     private List<TransactionDto> transactions;
 }
