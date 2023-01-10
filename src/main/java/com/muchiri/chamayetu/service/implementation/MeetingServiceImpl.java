@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -92,6 +93,26 @@ public class MeetingServiceImpl implements MeetingService {
 
         meetingRepository.save(meeting);
 
+        return mapMeetingToMeetingDto(meeting);
+    }
+
+    @Override
+    public String deleteMeeting(Long id) throws MemberNotFoundException {
+        Meeting meeting = meetingRepository.findById(id).orElseThrow(
+                () -> new MemberNotFoundException("Member with ID " + id + " not found!")
+        );
+        meetingRepository.delete(meeting);
+
+        Meeting deletedMeeting = meetingRepository.findById(id).orElse(null);
+
+        return deletedMeeting == null ? "Deleted Successfully" : "Meeting with ID " + id + " not deleted!";
+    }
+
+    @Override
+    public MeetingDto findMeetingByDate(LocalDate date) throws NoDataFoundException {
+        Meeting meeting = meetingRepository.findMeetingByDate(date).orElseThrow(
+                () -> new NoDataFoundException("There was no meeting held on date " + date)
+        );
         return mapMeetingToMeetingDto(meeting);
     }
 
