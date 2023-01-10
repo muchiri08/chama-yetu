@@ -50,7 +50,7 @@ public class MeetingController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteMeeting(@PathVariable("id") Long id) throws MemberNotFoundException {
+    public ResponseEntity<String> deleteMeeting(@PathVariable("id") Long id) throws NoDataFoundException {
         String responseString = meetingService.deleteMeeting(id);
 
         return ResponseEntity.ok(responseString);

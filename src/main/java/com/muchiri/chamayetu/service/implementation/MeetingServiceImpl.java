@@ -97,9 +97,9 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public String deleteMeeting(Long id) throws MemberNotFoundException {
+    public String deleteMeeting(Long id) throws NoDataFoundException {
         Meeting meeting = meetingRepository.findById(id).orElseThrow(
-                () -> new MemberNotFoundException("Member with ID " + id + " not found!")
+                () -> new NoDataFoundException("Member with ID " + id + " not found!")
         );
         meetingRepository.delete(meeting);
 

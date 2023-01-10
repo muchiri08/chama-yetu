@@ -14,6 +14,6 @@ public interface MeetingService {
     Page<MeetingDto> getAllMeetings(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     MeetingDto findMeetingById(Long id) throws NoDataFoundException;
     MeetingDto updateMeeting(Long id, MeetingDto meetingDto) throws NoDataFoundException, MemberNotFoundException;
-    String deleteMeeting(Long id) throws MemberNotFoundException;
+    String deleteMeeting(Long id) throws NoDataFoundException;
     MeetingDto findMeetingByDate(LocalDate date) throws NoDataFoundException;
 }
