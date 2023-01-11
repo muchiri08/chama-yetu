@@ -3,6 +3,7 @@ package com.muchiri.chamayetu.advice;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
+import com.muchiri.chamayetu.exception.TransactionNotFoundException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -71,6 +72,14 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(InvalidFormatException.class)
     public Map<String, String> handleInvalidFormatException(InvalidFormatException invalidFormatException) {
         errorMap.put("message", "Invalid format for field "+invalidFormatException.getPath().get(0).getFieldName());
+
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public Map<String, String> handleTransactionNotFoundException(TransactionNotFoundException transactionNotFoundException){
+        errorMap.put("message", transactionNotFoundException.getMessage());
 
         return errorMap;
     }
