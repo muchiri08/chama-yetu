@@ -18,5 +18,6 @@ public interface MemberService {
 
     Boolean checkMemberById(Long id);
     Set<Member> getMembersByIds(Set<Long> ids);
+    Member getMemberById(Long id) throws MemberNotFoundException;
 
 }

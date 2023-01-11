@@ -27,5 +27,5 @@ public class InvestmentDto {
     private BigDecimal amountInvested;
     @NotNull
     private BigDecimal returnOfInvestment;
-    private List<TransactionDto> transactions;
+    private List<Long> transactionsIds;
 }
