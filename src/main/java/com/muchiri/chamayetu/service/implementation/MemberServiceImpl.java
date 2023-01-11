@@ -107,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Boolean checkMemberById(Long id) {
         Member member = memberRepository.findById(id).orElse(null);
-        if (member == null){
+        if (member == null) {
             return false;
         } else {
             return true;
@@ -117,14 +117,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Set<Member> getMembersByIds(Set<Long> ids) {
         Set<Member> members = ids.stream().map(memberId -> {
-            MemberDto memberDto = null;
+            Member member = null;
             try {
-                memberDto = findMemberById(memberId);
+                member = getMemberById(memberId);
             } catch (MemberNotFoundException e) {
-                log.error(e.getMessage());
+                log.error("Member with ID " + memberId + " not found!");
                 throw new RuntimeException(e);
             }
-            Member member = modelMapper.map(memberDto, Member.class);
             return member;
         }).collect(Collectors.toSet());
 
