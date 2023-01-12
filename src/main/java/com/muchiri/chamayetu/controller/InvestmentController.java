@@ -1,6 +1,7 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.InvestmentDto;
+import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.InvestmentService;
@@ -30,6 +31,13 @@ public class InvestmentController {
     @GetMapping
     public ResponseEntity<Page<InvestmentDto>> getAllInvestments(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
         Page<InvestmentDto> responseDto = investmentService.getAllInvestments(pageable);
+
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<InvestmentDto> updateInvestment(@PathVariable("id") Long id, @RequestBody @Valid InvestmentDto investmentDto) throws InvestmentNotFoundException {
+        InvestmentDto responseDto = investmentService.updateInvestment(id, investmentDto);
 
         return ResponseEntity.ok(responseDto);
     }

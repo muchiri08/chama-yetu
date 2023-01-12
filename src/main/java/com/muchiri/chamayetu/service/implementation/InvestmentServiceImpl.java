@@ -64,6 +64,18 @@ public class InvestmentServiceImpl implements InvestmentService {
         return investments.map(this::mapInvestmentToInvestmentDto);
     }
 
+    @Override
+    public InvestmentDto updateInvestment(Long id, InvestmentDto investmentDto) throws InvestmentNotFoundException {
+        Investment investment = getInvestmentById(id);
+
+        investment.setType(investmentDto.getType());
+        investment.setAmountInvested(investmentDto.getAmountInvested());
+        investment.setReturnOfInvestment(investmentDto.getReturnOfInvestment());
+        investment.setDate(investmentDto.getDate());
+
+        return mapInvestmentToInvestmentDto(investment);
+    }
+
     private InvestmentDto mapInvestmentToInvestmentDto(Investment investment) {
         InvestmentDto investmentDto = new InvestmentDto();
         investmentDto.setId(investment.getId());
