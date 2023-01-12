@@ -14,4 +14,5 @@ public interface InvestmentService {
     Page<InvestmentDto> getAllInvestments(Pageable pageable) throws PageNotFoundException, NoDataFoundException;
     InvestmentDto updateInvestment(Long id, InvestmentDto investmentDto) throws InvestmentNotFoundException;
     InvestmentDto findInvestmentById(Long id) throws InvestmentNotFoundException;
+    String deleteInvestment(Long id) throws InvestmentNotFoundException;
 }

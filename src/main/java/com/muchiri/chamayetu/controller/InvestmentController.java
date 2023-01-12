@@ -48,4 +48,11 @@ public class InvestmentController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteInvestment(@PathVariable("id") Long id) throws InvestmentNotFoundException {
+        String response = investmentService.deleteInvestment(id);
+
+        return ResponseEntity.ok(response);
+    }
 }

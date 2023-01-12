@@ -83,6 +83,16 @@ public class InvestmentServiceImpl implements InvestmentService {
         return mapInvestmentToInvestmentDto(investment);
     }
 
+    @Override
+    public String deleteInvestment(Long id) throws InvestmentNotFoundException {
+        Investment investment = getInvestmentById(id);
+        investmentRepository.delete(investment);
+
+        Investment deletedInvestment = investmentRepository.findById(id).orElse(null);
+
+        return deletedInvestment == null ? "Deleted Successfully" : "Investment with ID " + id + " not deleted!";
+    }
+
     private InvestmentDto mapInvestmentToInvestmentDto(Investment investment) {
         InvestmentDto investmentDto = new InvestmentDto();
         investmentDto.setId(investment.getId());
