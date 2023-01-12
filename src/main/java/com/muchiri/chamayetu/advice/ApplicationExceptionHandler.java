@@ -1,9 +1,7 @@
 package com.muchiri.chamayetu.advice;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.muchiri.chamayetu.exception.MemberNotFoundException;
-import com.muchiri.chamayetu.exception.NoDataFoundException;
-import com.muchiri.chamayetu.exception.TransactionNotFoundException;
+import com.muchiri.chamayetu.exception.*;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.muchiri.chamayetu.exception.PageNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +68,7 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(InvalidFormatException.class)
     public Map<String, String> handleInvalidFormatException(InvalidFormatException invalidFormatException) {
-        errorMap.put("message", "Invalid format for field "+invalidFormatException.getPath().get(0).getFieldName());
+        errorMap.put("message", "Invalid format for field: "+invalidFormatException.getPath().get(0).getFieldName());
 
         return errorMap;
     }
@@ -80,6 +77,14 @@ public class ApplicationExceptionHandler {
     @ExceptionHandler(TransactionNotFoundException.class)
     public Map<String, String> handleTransactionNotFoundException(TransactionNotFoundException transactionNotFoundException){
         errorMap.put("message", transactionNotFoundException.getMessage());
+
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(InvestmentNotFoundException.class)
+    public Map<String, String> handleInvestmentNotFoundException(InvestmentNotFoundException investmentNotFoundException){
+        errorMap.put("message", investmentNotFoundException.getMessage());
 
         return errorMap;
     }
