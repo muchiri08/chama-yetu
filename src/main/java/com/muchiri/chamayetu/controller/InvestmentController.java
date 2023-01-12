@@ -41,4 +41,11 @@ public class InvestmentController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<InvestmentDto> findInvestmentById(@PathVariable("id") Long id) throws InvestmentNotFoundException {
+        InvestmentDto responseDto = investmentService.findInvestmentById(id);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

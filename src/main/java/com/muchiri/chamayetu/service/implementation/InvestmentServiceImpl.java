@@ -76,6 +76,13 @@ public class InvestmentServiceImpl implements InvestmentService {
         return mapInvestmentToInvestmentDto(investment);
     }
 
+    @Override
+    public InvestmentDto findInvestmentById(Long id) throws InvestmentNotFoundException {
+        Investment investment = getInvestmentById(id);
+
+        return mapInvestmentToInvestmentDto(investment);
+    }
+
     private InvestmentDto mapInvestmentToInvestmentDto(Investment investment) {
         InvestmentDto investmentDto = new InvestmentDto();
         investmentDto.setId(investment.getId());
