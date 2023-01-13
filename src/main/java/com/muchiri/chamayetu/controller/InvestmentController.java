@@ -1,9 +1,7 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.InvestmentDto;
-import com.muchiri.chamayetu.enums.InvestmentType;
 import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
-import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.InvestmentService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +28,7 @@ public class InvestmentController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<InvestmentDto>> getAllInvestments(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+    public ResponseEntity<Page<InvestmentDto>> getAllInvestments(Pageable pageable) throws PageNotFoundException, InvestmentNotFoundException {
         Page<InvestmentDto> responseDto = investmentService.getAllInvestments(pageable);
 
         return ResponseEntity.ok(responseDto);

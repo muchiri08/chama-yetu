@@ -5,7 +5,6 @@ import com.muchiri.chamayetu.entity.Investment;
 import com.muchiri.chamayetu.entity.Transaction;
 import com.muchiri.chamayetu.enums.InvestmentType;
 import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
-import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.repository.InvestmentRepository;
 import com.muchiri.chamayetu.service.interfaces.InvestmentService;
@@ -48,21 +47,12 @@ public class InvestmentServiceImpl implements InvestmentService {
     }
 
     @Override
-    public Page<InvestmentDto> getAllInvestments(Pageable pageable) throws PageNotFoundException, NoDataFoundException {
+    public Page<InvestmentDto> getAllInvestments(Pageable pageable) throws PageNotFoundException, InvestmentNotFoundException {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         Page<Investment> investments = investmentRepository.findAll(sortedPageable);
-        int totalPages = investments.getTotalPages();
 
-        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
-            throw new PageNotFoundException("Invalid Page Size or Page Number");
-        }
-
-        if (investments.getNumberOfElements() == 0) {
-            throw new NoDataFoundException("No data found!");
-        }
-
-        return investments.map(this::mapInvestmentToInvestmentDto);
+        return mapPageableInvestmentToDto(pageable, investments);
     }
 
     @Override
@@ -106,6 +96,10 @@ public class InvestmentServiceImpl implements InvestmentService {
         }
         Page<Investment> investments = investmentRepository.findInvestmentByType(type, sortedPageable);
 
+        return mapPageableInvestmentToDto(pageable, investments);
+    }
+
+    private Page<InvestmentDto> mapPageableInvestmentToDto(Pageable pageable, Page<Investment> investments) throws InvestmentNotFoundException, PageNotFoundException {
         if (investments.isEmpty()) {
             throw new InvestmentNotFoundException("No investments found for the given type!");
         }
