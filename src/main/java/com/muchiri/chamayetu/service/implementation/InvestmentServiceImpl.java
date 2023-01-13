@@ -3,6 +3,7 @@ package com.muchiri.chamayetu.service.implementation;
 import com.muchiri.chamayetu.dto.InvestmentDto;
 import com.muchiri.chamayetu.entity.Investment;
 import com.muchiri.chamayetu.entity.Transaction;
+import com.muchiri.chamayetu.enums.InvestmentType;
 import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
@@ -91,6 +92,30 @@ public class InvestmentServiceImpl implements InvestmentService {
         Investment deletedInvestment = investmentRepository.findById(id).orElse(null);
 
         return deletedInvestment == null ? "Deleted Successfully" : "Investment with ID " + id + " not deleted!";
+    }
+
+    @Override
+    public Page<InvestmentDto> findInvestmentsByType(String investmentType, Pageable pageable) throws InvestmentNotFoundException, PageNotFoundException {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        InvestmentType type;
+        try {
+            type = InvestmentType.valueOf(investmentType.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new InvestmentNotFoundException("Invalid investment type: " + investmentType);
+        }
+        Page<Investment> investments = investmentRepository.findInvestmentByType(type, sortedPageable);
+
+        if (investments.isEmpty()) {
+            throw new InvestmentNotFoundException("No investments found for the given type!");
+        }
+        if (pageable.getPageNumber() > investments.getTotalPages()) {
+            throw new PageNotFoundException("Invalid page number");
+        }
+        if (pageable.getPageSize() < 1) {
+            throw new PageNotFoundException("Invalid page size");
+        }
+        return investments.map(this::mapInvestmentToInvestmentDto);
     }
 
     private InvestmentDto mapInvestmentToInvestmentDto(Investment investment) {

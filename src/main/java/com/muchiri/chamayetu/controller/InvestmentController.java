@@ -1,6 +1,7 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.InvestmentDto;
+import com.muchiri.chamayetu.enums.InvestmentType;
 import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
 import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
@@ -54,5 +55,12 @@ public class InvestmentController {
         String response = investmentService.deleteInvestment(id);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<Page<InvestmentDto>> findInvestmentsByType(@PathVariable("type") String type, Pageable pageable) throws PageNotFoundException, InvestmentNotFoundException {
+        Page<InvestmentDto> responseDto = investmentService.findInvestmentsByType(type, pageable);
+
+        return ResponseEntity.ok(responseDto);
     }
 }
