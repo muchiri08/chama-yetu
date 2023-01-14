@@ -53,13 +53,15 @@ public class DecisionServiceImpl implements DecisionService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         Page<Decision> decisions = decisionRepository.findAll(sortedPageable);
-        int totalPages = decisions.getTotalPages();
 
-        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
-            throw new PageNotFoundException("Invalid Page Size or Page Number");
+        if (decisions.isEmpty()){
+            throw new NoDataFoundException("No decisions found!");
         }
-        if (decisions.getNumberOfElements() == 0) {
-            throw new NoDataFoundException("No Data Found!");
+        if (sortedPageable.getPageNumber() > decisions.getTotalPages()){
+            throw new PageNotFoundException("Invalid pae number!");
+        }
+        if (sortedPageable.getPageSize() < 1){
+            throw new PageNotFoundException("Invalid page size");
         }
 
         return decisions.map(this::decisionToDecisionDto);
