@@ -45,13 +45,7 @@ public class ContributionServiceImpl implements ContributionService {
 
         contributionRepository.save(contribution);
 
-        ContributionDto responseDto = new ContributionDto();
-        responseDto.setId(contribution.getId());
-        responseDto.setMemberId(member.getId());
-        responseDto.setAmount(contribution.getAmount());
-        responseDto.setDateTime(contribution.getDateTime());
-
-        return responseDto;
+        return mapContributionToContributionDto(contribution);
     }
 
     @Override
@@ -59,16 +53,8 @@ public class ContributionServiceImpl implements ContributionService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         Page<Contribution> contributions = contributionRepository.findAll(sortedPageable);
-        int totalPages = contributions.getTotalPages();
 
-        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
-            throw new PageNotFoundException("Invalid Page Size or Page Number");
-        }
-        if (contributions.getNumberOfElements() == 0) {
-            throw new NoDataFoundException("No Data Found!");
-        }
-
-        return contributions.map(this::mapContributionToContributionDto);
+        return mapPageableContributionToDto(contributions, sortedPageable);
     }
 
     @Override
@@ -76,13 +62,8 @@ public class ContributionServiceImpl implements ContributionService {
         Contribution contribution = contributionRepository.findById(id).orElseThrow(
                 () -> new NoDataFoundException("Contribution with ID " + id + " not found")
         );
-        ContributionDto contributionDto = new ContributionDto();
-        contributionDto.setId(contribution.getId());
-        contributionDto.setMemberId(contribution.getMember().getId());
-        contributionDto.setAmount(contribution.getAmount());
-        contributionDto.setDateTime(contribution.getDateTime());
 
-        return contributionDto;
+        return mapContributionToContributionDto(contribution);
     }
 
     @Transactional
@@ -99,13 +80,7 @@ public class ContributionServiceImpl implements ContributionService {
         contribution.setAmount(contributionDto.getAmount());
         contribution.setDateTime(contributionDto.getDateTime());
 
-        ContributionDto responseDto = new ContributionDto();
-        responseDto.setId(contribution.getId());
-        responseDto.setMemberId(contribution.getMember().getId());
-        responseDto.setAmount(contribution.getAmount());
-        responseDto.setDateTime(contribution.getDateTime());
-
-        return responseDto;
+        return mapContributionToContributionDto(contribution);
     }
 
     @Transactional
@@ -133,17 +108,8 @@ public class ContributionServiceImpl implements ContributionService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         Page<Contribution> contributions = contributionRepository.findContributionByDateTimeBetween(fromDateTime, toDateTime, sortedPageable);
-        int totalPages = contributions.getTotalPages();
 
-        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
-            throw new PageNotFoundException("Invalid Page Size or Page Number");
-        }
-
-        if (contributions.getNumberOfElements() == 0) {
-            throw new NoDataFoundException("No Data Found");
-        }
-
-        return contributions.map(this::mapContributionToContributionDto);
+        return mapPageableContributionToDto(contributions, sortedPageable);
     }
 
     @Override
@@ -153,17 +119,22 @@ public class ContributionServiceImpl implements ContributionService {
         Sort sort = Sort.by(Sort.Direction.DESC, "id");
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         Page<Contribution> memberContributions = contributionRepository.findByMemberId(id, sortedPageable);
-        int totalPages = memberContributions.getTotalPages();
 
-        if (pageable.getPageSize() < 0 || pageable.getPageNumber() > totalPages) {
-            throw new PageNotFoundException("Invalid Page Size or Page Number");
+        return mapPageableContributionToDto(memberContributions, sortedPageable);
+    }
+
+    Page<ContributionDto> mapPageableContributionToDto(Page<Contribution> contributions, Pageable pageable) throws NoDataFoundException, PageNotFoundException {
+        if (contributions.isEmpty()) {
+            throw new NoDataFoundException("No contributions found!");
+        }
+        if (pageable.getPageNumber() > contributions.getTotalPages()) {
+            throw new PageNotFoundException("Invalid page number");
+        }
+        if (pageable.getPageSize() < 1) {
+            throw new PageNotFoundException("Invalid page size");
         }
 
-        if (memberContributions.getNumberOfElements() == 0) {
-            throw new NoDataFoundException("No Data Found");
-        }
-
-        return memberContributions.map(this::mapContributionToContributionDto);
+        return contributions.map(this::mapContributionToContributionDto);
     }
 
     private ContributionDto mapContributionToContributionDto(Contribution contribution) {

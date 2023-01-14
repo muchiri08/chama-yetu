@@ -101,7 +101,7 @@ public class InvestmentServiceImpl implements InvestmentService {
 
     private Page<InvestmentDto> mapPageableInvestmentToDto(Pageable pageable, Page<Investment> investments) throws InvestmentNotFoundException, PageNotFoundException {
         if (investments.isEmpty()) {
-            throw new InvestmentNotFoundException("No investments found for the given type!");
+            throw new InvestmentNotFoundException("No investments found!");
         }
         if (pageable.getPageNumber() > investments.getTotalPages()) {
             throw new PageNotFoundException("Invalid page number");
