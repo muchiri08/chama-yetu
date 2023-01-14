@@ -35,19 +35,8 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public TransactionDto createTransaction(TransactionDto transactionDto) throws InvestmentNotFoundException, MemberNotFoundException {
-        Transaction transaction = new Transaction();
-        transaction.setType(transactionDto.getType());
-        transaction.setAmount(transactionDto.getAmount());
-        transaction.setDateTime(transactionDto.getDateTime());
-        if (transactionDto.getType() == TransactionType.INVESTMENT) {
-            transaction.setInvestment(investmentService.getInvestmentById(transactionDto.getInvestmentId()));
-        } else {
-            transaction.setInvestment(null);
-        }
-
-        transaction.setMember(memberService.getMemberById(transactionDto.getMemberId()));
-
-        transactionRepository.save(transaction);
+        Transaction transaction = setTransactionFromTransactionDto(transactionDto, new Transaction());
+        transaction = transactionRepository.save(transaction);
 
         return mapTransactionToTransactionDto(transaction);
     }
@@ -84,6 +73,14 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(
                 () -> new TransactionNotFoundException("Transaction with ID " + id + " not found!")
         );
+        setTransactionFromTransactionDto(transactionDto, transaction);
+
+        transaction = transactionRepository.save(transaction);
+
+        return mapTransactionToTransactionDto(transaction);
+    }
+
+    private Transaction setTransactionFromTransactionDto(TransactionDto transactionDto, Transaction transaction) throws InvestmentNotFoundException, MemberNotFoundException {
         transaction.setType(transactionDto.getType());
         transaction.setAmount(transactionDto.getAmount());
         transaction.setDateTime(transactionDto.getDateTime());
@@ -93,11 +90,9 @@ public class TransactionServiceImpl implements TransactionService {
             transaction.setInvestment(null);
         }
         transaction.setMember(memberService.getMemberById(transactionDto.getMemberId()));
-
-        transactionRepository.save(transaction);
-
-        return mapTransactionToTransactionDto(transaction);
+        return transaction;
     }
+
 
     private TransactionDto mapTransactionToTransactionDto(Transaction transaction) {
         TransactionDto transactionDto = new TransactionDto();
