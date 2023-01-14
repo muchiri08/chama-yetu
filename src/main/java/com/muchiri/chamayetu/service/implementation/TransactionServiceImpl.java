@@ -50,7 +50,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public TransactionDto findTransactionById(Long id) throws TransactionNotFoundException {
         Transaction transaction = transactionRepository.findById(id).orElseThrow(
-                () -> new TransactionNotFoundException("Transaction with ID " + id + "not found!")
+                () -> new TransactionNotFoundException("Transaction with ID " + id + " not found!")
         );
         return mapTransactionToTransactionDto(transaction);
     }
@@ -60,7 +60,11 @@ public class TransactionServiceImpl implements TransactionService {
         transactionDto.setId(transaction.getId());
         transactionDto.setType(transaction.getType());
         transactionDto.setAmount(transaction.getAmount());
-        transactionDto.setInvestmentId(transaction.getInvestment().getId());
+        if (transaction.getInvestment() == null){
+            transactionDto.setInvestmentId(null);
+        } else {
+            transactionDto.setInvestmentId(transaction.getInvestment().getId());
+        }
         transactionDto.setMemberId(transaction.getMember().getId());
         transactionDto.setDateTime(transaction.getDateTime());
 
