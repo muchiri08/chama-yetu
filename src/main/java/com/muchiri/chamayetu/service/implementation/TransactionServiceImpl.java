@@ -5,6 +5,7 @@ import com.muchiri.chamayetu.entity.Transaction;
 import com.muchiri.chamayetu.enums.TransactionType;
 import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
+import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.exception.TransactionNotFoundException;
 import com.muchiri.chamayetu.repository.TransactionRepository;
 import com.muchiri.chamayetu.service.interfaces.InvestmentService;
@@ -12,6 +13,10 @@ import com.muchiri.chamayetu.service.interfaces.MemberService;
 import com.muchiri.chamayetu.service.interfaces.TransactionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,12 +60,31 @@ public class TransactionServiceImpl implements TransactionService {
         return mapTransactionToTransactionDto(transaction);
     }
 
+    @Override
+    public Page<TransactionDto> findAllTransactions(Pageable pageable) throws TransactionNotFoundException, PageNotFoundException {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Transaction> transactions = transactionRepository.findAll(sortedPageable);
+
+        if (transactions.isEmpty()) {
+            throw new TransactionNotFoundException("Not transactions found!");
+        }
+        if (sortedPageable.getPageNumber() > transactions.getTotalPages()) {
+            throw new PageNotFoundException("Invalid page number");
+        }
+        if (sortedPageable.getPageSize() < 1) {
+            throw new PageNotFoundException("Invalid page size");
+        }
+
+        return transactions.map(this::mapTransactionToTransactionDto);
+    }
+
     private TransactionDto mapTransactionToTransactionDto(Transaction transaction) {
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setId(transaction.getId());
         transactionDto.setType(transaction.getType());
         transactionDto.setAmount(transaction.getAmount());
-        if (transaction.getInvestment() == null){
+        if (transaction.getInvestment() == null) {
             transactionDto.setInvestmentId(null);
         } else {
             transactionDto.setInvestmentId(transaction.getInvestment().getId());

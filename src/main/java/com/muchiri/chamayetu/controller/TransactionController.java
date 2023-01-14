@@ -3,9 +3,12 @@ package com.muchiri.chamayetu.controller;
 import com.muchiri.chamayetu.dto.TransactionDto;
 import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
+import com.muchiri.chamayetu.exception.PageNotFoundException;
 import com.muchiri.chamayetu.exception.TransactionNotFoundException;
 import com.muchiri.chamayetu.service.interfaces.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +32,13 @@ public class TransactionController {
     @GetMapping("/{id}")
     public ResponseEntity<TransactionDto> findTransactionById(@PathVariable Long id) throws TransactionNotFoundException {
         TransactionDto responseDto = transactionService.findTransactionById(id);
+
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<TransactionDto>> findAllTransactions(Pageable pageable) throws PageNotFoundException, TransactionNotFoundException {
+        Page<TransactionDto> responseDto = transactionService.findAllTransactions(pageable);
 
         return ResponseEntity.ok(responseDto);
     }
