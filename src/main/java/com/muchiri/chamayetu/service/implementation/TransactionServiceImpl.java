@@ -79,6 +79,26 @@ public class TransactionServiceImpl implements TransactionService {
         return transactions.map(this::mapTransactionToTransactionDto);
     }
 
+    @Override
+    public TransactionDto updateTransaction(Long id, TransactionDto transactionDto) throws TransactionNotFoundException, InvestmentNotFoundException, MemberNotFoundException {
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(
+                () -> new TransactionNotFoundException("Transaction with ID " + id + " not found!")
+        );
+        transaction.setType(transactionDto.getType());
+        transaction.setAmount(transactionDto.getAmount());
+        transaction.setDateTime(transactionDto.getDateTime());
+        if (transactionDto.getType() == TransactionType.INVESTMENT) {
+            transaction.setInvestment(investmentService.getInvestmentById(transactionDto.getInvestmentId()));
+        } else {
+            transaction.setInvestment(null);
+        }
+        transaction.setMember(memberService.getMemberById(transactionDto.getMemberId()));
+
+        transactionRepository.save(transaction);
+
+        return mapTransactionToTransactionDto(transaction);
+    }
+
     private TransactionDto mapTransactionToTransactionDto(Transaction transaction) {
         TransactionDto transactionDto = new TransactionDto();
         transactionDto.setId(transaction.getId());

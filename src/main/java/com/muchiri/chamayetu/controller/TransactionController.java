@@ -42,4 +42,11 @@ public class TransactionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TransactionDto> updateTransaction(@PathVariable("id") Long id, @RequestBody @Valid TransactionDto transactionDto) throws InvestmentNotFoundException, TransactionNotFoundException, MemberNotFoundException {
+        TransactionDto responseDto = transactionService.updateTransaction(id, transactionDto);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

@@ -15,4 +15,5 @@ public interface TransactionService {
     TransactionDto createTransaction(TransactionDto transactionDto) throws InvestmentNotFoundException, MemberNotFoundException;
     TransactionDto findTransactionById(Long id) throws TransactionNotFoundException;
     Page<TransactionDto> findAllTransactions(Pageable pageable) throws TransactionNotFoundException, PageNotFoundException;
+    TransactionDto updateTransaction(Long id, TransactionDto transactionDto) throws TransactionNotFoundException, InvestmentNotFoundException, MemberNotFoundException;
 }
