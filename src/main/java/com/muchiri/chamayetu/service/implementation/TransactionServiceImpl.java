@@ -92,6 +92,30 @@ public class TransactionServiceImpl implements TransactionService {
         return deletedTransaction == null ? "Transaction deleted successfully" : "Transaction with ID " + id + " not deleted!";
     }
 
+    @Override
+    public Page<TransactionDto> findByTransactionType(String transactionType, Pageable pageable) throws TransactionNotFoundException, PageNotFoundException {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        TransactionType type;
+        try {
+            type = TransactionType.valueOf(transactionType.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new TransactionNotFoundException("Invalid transaction of type: " + transactionType);
+        }
+        Page<Transaction> transactions = transactionRepository.findTransactionByType(type, sortedPageable);
+
+        if (transactions.isEmpty()) {
+            throw new TransactionNotFoundException("No transactions of type: " + type + " found!");
+        }
+        if (sortedPageable.getPageNumber() > transactions.getTotalPages()) {
+            throw new PageNotFoundException("Invalid page number");
+        }
+        if (sortedPageable.getPageSize() < 1) {
+            throw new PageNotFoundException("Invalid page size");
+        }
+        return transactions.map(this::mapTransactionToTransactionDto);
+    }
+
     private Transaction setTransactionFromTransactionDto(TransactionDto transactionDto, Transaction transaction) throws InvestmentNotFoundException, MemberNotFoundException {
         transaction.setType(transactionDto.getType());
         transaction.setAmount(transactionDto.getAmount());

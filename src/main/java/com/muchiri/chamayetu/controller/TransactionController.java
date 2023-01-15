@@ -56,4 +56,11 @@ public class TransactionController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<Page<TransactionDto>> findByTransactionType(@PathVariable("type") String type, Pageable pageable) throws PageNotFoundException, TransactionNotFoundException {
+        Page<TransactionDto> responseDto = transactionService.findByTransactionType(type, pageable);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }
