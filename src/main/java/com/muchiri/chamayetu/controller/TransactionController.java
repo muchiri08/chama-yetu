@@ -49,4 +49,11 @@ public class TransactionController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteTransaction(@PathVariable("id") Long id) throws TransactionNotFoundException {
+        String response = transactionService.deleteTransaction(id);
+
+        return ResponseEntity.ok(response);
+    }
 }

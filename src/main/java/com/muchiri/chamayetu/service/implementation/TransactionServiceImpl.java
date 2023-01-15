@@ -80,6 +80,18 @@ public class TransactionServiceImpl implements TransactionService {
         return mapTransactionToTransactionDto(transaction);
     }
 
+    @Override
+    public String deleteTransaction(Long id) throws TransactionNotFoundException {
+        Transaction transaction = transactionRepository.findById(id).orElseThrow(
+                () -> new TransactionNotFoundException("Transaction with ID " + id + " not found!")
+        );
+        transactionRepository.delete(transaction);
+
+        Transaction deletedTransaction = transactionRepository.findById(id).orElse(null);
+
+        return deletedTransaction == null ? "Transaction deleted successfully" : "Transaction with ID " + id + " not deleted!";
+    }
+
     private Transaction setTransactionFromTransactionDto(TransactionDto transactionDto, Transaction transaction) throws InvestmentNotFoundException, MemberNotFoundException {
         transaction.setType(transactionDto.getType());
         transaction.setAmount(transactionDto.getAmount());
