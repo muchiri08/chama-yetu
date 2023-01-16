@@ -52,6 +52,10 @@ public class InvestmentServiceImpl implements InvestmentService {
         Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         Page<Investment> investments = investmentRepository.findAll(sortedPageable);
 
+        if (investments.isEmpty()){
+            throw new InvestmentNotFoundException("No investments found!");
+        }
+
         return mapPageableInvestmentToDto(pageable, investments);
     }
 
