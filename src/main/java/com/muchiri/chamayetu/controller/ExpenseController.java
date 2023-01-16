@@ -1,8 +1,11 @@
 package com.muchiri.chamayetu.controller;
 
 import com.muchiri.chamayetu.dto.ExpenseDto;
+import com.muchiri.chamayetu.exception.NoDataFoundException;
 import com.muchiri.chamayetu.service.interfaces.ExpenseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,5 +24,12 @@ public class ExpenseController {
         ExpenseDto responseDto = expenseService.createExpense(expenseDto);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<ExpenseDto>> findAllExpenses(Pageable pageable) throws NoDataFoundException {
+        Page<ExpenseDto> responseDto = expenseService.findAllExpenses(pageable);
+
+        return ResponseEntity.ok(responseDto);
     }
 }
