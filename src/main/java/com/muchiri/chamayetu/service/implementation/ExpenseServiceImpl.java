@@ -42,4 +42,13 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return expenses.map(expense -> modelMapper.map(expense, ExpenseDto.class));
     }
+
+    @Override
+    public ExpenseDto findExpenseById(Long id) throws NoDataFoundException {
+        Expense expense = expenseRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Expense with ID " + id + " not found!")
+        );
+
+        return modelMapper.map(expense, ExpenseDto.class);
+    }
 }

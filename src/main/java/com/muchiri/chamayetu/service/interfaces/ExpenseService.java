@@ -7,5 +7,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface ExpenseService {
     ExpenseDto createExpense(ExpenseDto expenseDto);
+
     Page<ExpenseDto> findAllExpenses(Pageable pageable) throws NoDataFoundException;
+
+    ExpenseDto findExpenseById(Long id) throws NoDataFoundException;
 }

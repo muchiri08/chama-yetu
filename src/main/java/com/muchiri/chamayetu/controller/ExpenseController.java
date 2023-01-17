@@ -32,4 +32,11 @@ public class ExpenseController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ExpenseDto> findExpenseById(@PathVariable Long id) throws NoDataFoundException {
+        ExpenseDto responseDto = expenseService.findExpenseById(id);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }
