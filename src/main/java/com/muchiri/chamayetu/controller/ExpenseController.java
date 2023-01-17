@@ -39,4 +39,11 @@ public class ExpenseController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<ExpenseDto> updateExpense(@PathVariable("id") Long id, @RequestBody @Valid ExpenseDto expenseDto) throws NoDataFoundException {
+        ExpenseDto responseDto = expenseService.updateExpense(id, expenseDto);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

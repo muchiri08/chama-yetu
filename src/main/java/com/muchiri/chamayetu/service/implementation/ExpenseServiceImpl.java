@@ -51,4 +51,19 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return modelMapper.map(expense, ExpenseDto.class);
     }
+
+    @Override
+    public ExpenseDto updateExpense(Long id, ExpenseDto expenseDto) throws NoDataFoundException {
+        Expense expense = expenseRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Expense with ID " + id + " not found!")
+        );
+        expense.setType(expenseDto.getType());
+        expense.setAmount(expenseDto.getAmount());
+        expense.setDescription(expenseDto.getDescription());
+        expense.setDateTime(expenseDto.getDateTime());
+
+        Expense updatedExpense = expenseRepository.save(expense);
+
+        return modelMapper.map(updatedExpense, ExpenseDto.class);
+    }
 }

@@ -11,4 +11,6 @@ public interface ExpenseService {
     Page<ExpenseDto> findAllExpenses(Pageable pageable) throws NoDataFoundException;
 
     ExpenseDto findExpenseById(Long id) throws NoDataFoundException;
+
+    ExpenseDto updateExpense(Long id, ExpenseDto expenseDto) throws NoDataFoundException;
 }
