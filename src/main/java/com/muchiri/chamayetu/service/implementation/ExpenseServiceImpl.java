@@ -66,4 +66,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 
         return modelMapper.map(updatedExpense, ExpenseDto.class);
     }
+
+    @Override
+    public String deleteExpense(Long id) throws NoDataFoundException {
+        Expense expense = expenseRepository.findById(id).orElseThrow(
+                () -> new NoDataFoundException("Expense with ID " + id + " not found!")
+        );
+        expenseRepository.delete(expense);
+
+        Expense deletedExpense = expenseRepository.findById(id).orElse(null);
+
+        return deletedExpense == null ? "Expense deleted successfully" : "Expense with ID " + id + " not deleted!";
+    }
 }

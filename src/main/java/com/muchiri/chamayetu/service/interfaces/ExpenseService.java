@@ -13,4 +13,6 @@ public interface ExpenseService {
     ExpenseDto findExpenseById(Long id) throws NoDataFoundException;
 
     ExpenseDto updateExpense(Long id, ExpenseDto expenseDto) throws NoDataFoundException;
+
+    String deleteExpense(Long id) throws NoDataFoundException;
 }

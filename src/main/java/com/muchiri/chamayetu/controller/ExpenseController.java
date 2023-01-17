@@ -46,4 +46,11 @@ public class ExpenseController {
 
         return ResponseEntity.ok(responseDto);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteExpense(@PathVariable Long id) throws NoDataFoundException {
+        String response = expenseService.deleteExpense(id);
+
+        return ResponseEntity.ok(response);
+    }
 }
