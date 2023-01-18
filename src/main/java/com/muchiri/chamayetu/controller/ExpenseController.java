@@ -53,4 +53,11 @@ public class ExpenseController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/type/{type}")
+    public ResponseEntity<Page<ExpenseDto>> findExpensesByType(@PathVariable("type") String type, Pageable pageable) throws NoDataFoundException {
+        Page<ExpenseDto> responseDto = expenseService.findExpensesByType(type, pageable);
+
+        return ResponseEntity.ok(responseDto);
+    }
 }

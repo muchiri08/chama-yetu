@@ -15,4 +15,6 @@ public interface ExpenseService {
     ExpenseDto updateExpense(Long id, ExpenseDto expenseDto) throws NoDataFoundException;
 
     String deleteExpense(Long id) throws NoDataFoundException;
+
+    Page<ExpenseDto> findExpensesByType(String expenseType, Pageable pageable) throws NoDataFoundException;
 }
