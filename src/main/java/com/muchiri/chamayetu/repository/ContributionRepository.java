@@ -8,14 +8,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Repository
 public interface ContributionRepository extends JpaRepository<Contribution, Long> {
     Page<Contribution> findAll(Pageable pageable);
+
     @Query("SELECT c FROM Contribution c WHERE c.dateTime BETWEEN :fromDate AND :toDate")
     Page<Contribution> findContributionByDateTimeBetween(@Param("fromDate") LocalDateTime fromDate, @Param("toDate") LocalDateTime toDate, Pageable pageable);
 
     @Query("SELECT c FROM Contribution c WHERE c.member.id = :id")
     Page<Contribution> findByMemberId(@Param("id") Long id, Pageable pageable);
+
+    @Query("SELECT SUM(c.amount) FROM Contribution c WHERE c.dateTime BETWEEN :startDate AND :endDate")
+    BigDecimal getTotalContributionsBetweenDates(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

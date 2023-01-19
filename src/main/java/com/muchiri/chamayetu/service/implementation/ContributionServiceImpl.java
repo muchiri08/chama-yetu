@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -121,6 +122,16 @@ public class ContributionServiceImpl implements ContributionService {
         Page<Contribution> memberContributions = contributionRepository.findByMemberId(id, sortedPageable);
 
         return mapPageableContributionToDto(memberContributions, sortedPageable);
+    }
+
+    @Override
+    public BigDecimal getTotalContributionsBetweenDates(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        BigDecimal totalContributions = contributionRepository.getTotalContributionsBetweenDates(startDateTime, endDateTime);
+
+        return totalContributions;
     }
 
     Page<ContributionDto> mapPageableContributionToDto(Page<Contribution> contributions, Pageable pageable) throws NoDataFoundException, PageNotFoundException {
