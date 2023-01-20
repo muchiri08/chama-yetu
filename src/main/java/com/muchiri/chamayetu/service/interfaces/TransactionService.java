@@ -8,11 +8,21 @@ import com.muchiri.chamayetu.exception.TransactionNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 public interface TransactionService {
     TransactionDto createTransaction(TransactionDto transactionDto) throws InvestmentNotFoundException, MemberNotFoundException;
+
     TransactionDto findTransactionById(Long id) throws TransactionNotFoundException;
+
     Page<TransactionDto> findAllTransactions(Pageable pageable) throws TransactionNotFoundException, PageNotFoundException;
+
     TransactionDto updateTransaction(Long id, TransactionDto transactionDto) throws TransactionNotFoundException, InvestmentNotFoundException, MemberNotFoundException;
+
     String deleteTransaction(Long id) throws TransactionNotFoundException;
+
     Page<TransactionDto> findByTransactionType(String transactionType, Pageable pageable) throws TransactionNotFoundException, PageNotFoundException;
+
+    BigDecimal getTotalWithdrawalsBetweenDates(LocalDate startDate, LocalDate endDate);
 }

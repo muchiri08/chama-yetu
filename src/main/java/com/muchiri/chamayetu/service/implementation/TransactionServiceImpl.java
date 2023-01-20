@@ -19,6 +19,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Service
 @Slf4j
 public class TransactionServiceImpl implements TransactionService {
@@ -114,6 +118,16 @@ public class TransactionServiceImpl implements TransactionService {
             throw new PageNotFoundException("Invalid page size");
         }
         return transactions.map(this::mapTransactionToTransactionDto);
+    }
+
+    @Override
+    public BigDecimal getTotalWithdrawalsBetweenDates(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        BigDecimal totalWithdrawals = transactionRepository.getTotalWithdrawalsBetweenDates(startDateTime, endDateTime);
+
+        return totalWithdrawals;
     }
 
     private Transaction setTransactionFromTransactionDto(TransactionDto transactionDto, Transaction transaction) throws InvestmentNotFoundException, MemberNotFoundException {
