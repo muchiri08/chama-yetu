@@ -14,6 +14,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class ExpenseServiceImpl implements ExpenseService {
@@ -97,5 +101,15 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
 
         return expenses.map(expense -> modelMapper.map(expense, ExpenseDto.class));
+    }
+
+    @Override
+    public BigDecimal getTotalExpensesBetweenDates(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        BigDecimal totalExpenses = expenseRepository.getTotalExpensesBetweenDates(startDateTime, endDateTime);
+
+        return totalExpenses;
     }
 }

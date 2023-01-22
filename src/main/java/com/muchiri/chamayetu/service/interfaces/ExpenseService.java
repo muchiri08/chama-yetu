@@ -5,6 +5,9 @@ import com.muchiri.chamayetu.exception.NoDataFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 public interface ExpenseService {
     ExpenseDto createExpense(ExpenseDto expenseDto);
 
@@ -17,4 +20,6 @@ public interface ExpenseService {
     String deleteExpense(Long id) throws NoDataFoundException;
 
     Page<ExpenseDto> findExpensesByType(String expenseType, Pageable pageable) throws NoDataFoundException;
+
+    BigDecimal getTotalExpensesBetweenDates(LocalDate startDate, LocalDate endDate);
 }
