@@ -28,4 +28,6 @@ public interface TransactionService {
     BigDecimal getTotalWithdrawalsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
 
     BigDecimal getTotalInvestmentsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
+
+    BigDecimal getTotalInterestsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
 }
