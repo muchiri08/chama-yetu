@@ -30,4 +30,7 @@ public interface TransactionService {
     BigDecimal getTotalInvestmentsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
 
     BigDecimal getTotalInterestsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
+
+    BigDecimal getTotalRefundsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
+
 }
