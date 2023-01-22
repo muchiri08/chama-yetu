@@ -33,4 +33,6 @@ public interface TransactionService {
 
     BigDecimal getTotalRefundsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
 
+    BigDecimal getTotalIncomeBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
+
 }

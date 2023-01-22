@@ -160,6 +160,16 @@ public class TransactionServiceImpl implements TransactionService {
         return totalRefunds;
     }
 
+    @Override
+    public BigDecimal getTotalIncomeBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        BigDecimal totalIncome = transactionRepository.getTotalsBetweenDates(TransactionType.INCOME, startDateTime, endDateTime);
+
+        return totalIncome;
+    }
+
     private Transaction setTransactionFromTransactionDto(TransactionDto transactionDto, Transaction transaction) throws InvestmentNotFoundException, MemberNotFoundException {
         transaction.setType(transactionDto.getType());
         transaction.setAmount(transactionDto.getAmount());
