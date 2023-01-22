@@ -25,6 +25,7 @@ public interface TransactionService {
 
     Page<TransactionDto> findByTransactionType(String transactionType, Pageable pageable) throws TransactionNotFoundException, PageNotFoundException;
 
-    BigDecimal getTotalWithdrawalsBetweenDates(TransactionType transactionType,LocalDate startDate, LocalDate endDate);
+    BigDecimal getTotalWithdrawalsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
 
+    BigDecimal getTotalInvestmentsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate);
 }

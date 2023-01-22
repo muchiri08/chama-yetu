@@ -125,9 +125,19 @@ public class TransactionServiceImpl implements TransactionService {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
 
-        BigDecimal totalWithdrawals = transactionRepository.getTotalsBetweenDates(TransactionType.WITHDRAWAL ,startDateTime, endDateTime);
+        BigDecimal totalWithdrawals = transactionRepository.getTotalsBetweenDates(TransactionType.WITHDRAWAL, startDateTime, endDateTime);
 
         return totalWithdrawals;
+    }
+
+    @Override
+    public BigDecimal getTotalInvestmentsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        BigDecimal totalInvestments = transactionRepository.getTotalsBetweenDates(TransactionType.INVESTMENT, startDateTime, endDateTime);
+
+        return totalInvestments;
     }
 
     private Transaction setTransactionFromTransactionDto(TransactionDto transactionDto, Transaction transaction) throws InvestmentNotFoundException, MemberNotFoundException {
