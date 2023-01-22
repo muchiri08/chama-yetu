@@ -18,6 +18,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Page<Transaction> findTransactionByType(TransactionType type, Pageable pageable);
 
-    @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.type = com.muchiri.chamayetu.enums.TransactionType.WITHDRAWAL AND t.dateTime BETWEEN :startDate AND :endDate")
-    BigDecimal getTotalWithdrawalsBetweenDates(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.type = :type AND t.dateTime BETWEEN :startDate AND :endDate")
+    BigDecimal getTotalsBetweenDates(@Param("type") TransactionType transactionType, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 }

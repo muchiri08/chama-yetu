@@ -121,11 +121,11 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public BigDecimal getTotalWithdrawalsBetweenDates(LocalDate startDate, LocalDate endDate) {
+    public BigDecimal getTotalWithdrawalsBetweenDates(TransactionType transactionType, LocalDate startDate, LocalDate endDate) {
         LocalDateTime startDateTime = startDate.atStartOfDay();
         LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
 
-        BigDecimal totalWithdrawals = transactionRepository.getTotalWithdrawalsBetweenDates(startDateTime, endDateTime);
+        BigDecimal totalWithdrawals = transactionRepository.getTotalsBetweenDates(TransactionType.WITHDRAWAL ,startDateTime, endDateTime);
 
         return totalWithdrawals;
     }

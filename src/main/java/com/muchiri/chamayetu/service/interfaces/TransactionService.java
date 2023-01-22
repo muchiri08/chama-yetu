@@ -1,6 +1,7 @@
 package com.muchiri.chamayetu.service.interfaces;
 
 import com.muchiri.chamayetu.dto.TransactionDto;
+import com.muchiri.chamayetu.enums.TransactionType;
 import com.muchiri.chamayetu.exception.InvestmentNotFoundException;
 import com.muchiri.chamayetu.exception.MemberNotFoundException;
 import com.muchiri.chamayetu.exception.PageNotFoundException;
@@ -24,5 +25,6 @@ public interface TransactionService {
 
     Page<TransactionDto> findByTransactionType(String transactionType, Pageable pageable) throws TransactionNotFoundException, PageNotFoundException;
 
-    BigDecimal getTotalWithdrawalsBetweenDates(LocalDate startDate, LocalDate endDate);
+    BigDecimal getTotalWithdrawalsBetweenDates(TransactionType transactionType,LocalDate startDate, LocalDate endDate);
+
 }
