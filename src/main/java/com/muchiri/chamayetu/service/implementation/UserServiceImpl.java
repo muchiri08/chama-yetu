@@ -8,6 +8,7 @@ import com.muchiri.chamayetu.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper = new ModelMapper();
 
+    @Transactional
     @Override
     public UserDto createNewUser(UserDto userDto) {
         User user = modelMapper.map(userDto, User.class);
@@ -40,6 +42,7 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+    @Transactional
     @Override
     public UserDto updateUser(Long id, UserDto userDto) {
         User user = userRepository.findById(id).get();
@@ -50,6 +53,7 @@ public class UserServiceImpl implements UserService {
         return modelMapper.map(user, UserDto.class);
     }
 
+    @Transactional
     @Override
     public String deleteUser(Long id) {
         User user = userRepository.findById(id).get();
