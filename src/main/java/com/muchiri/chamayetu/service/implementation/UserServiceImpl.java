@@ -49,4 +49,16 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         return modelMapper.map(user, UserDto.class);
     }
+
+    @Override
+    public String deleteUser(Long id) {
+        User user = userRepository.findById(id).get();
+        userRepository.delete(user);
+
+        User deleted = userRepository.findById(id).orElse(null);
+
+        return deleted == null ? "User deleted successfully" : "User not deleted. Try again later!";
+    }
+
+
 }
