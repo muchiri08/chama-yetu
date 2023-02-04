@@ -39,4 +39,14 @@ public class UserServiceImpl implements UserService {
 
         return response;
     }
+
+    @Override
+    public UserDto updateUser(Long id, UserDto userDto) {
+        User user = userRepository.findById(id).get();
+        user.setUsername(userDto.getUsername());
+        user.setPassword(user.getPassword());
+
+        userRepository.save(user);
+        return modelMapper.map(user, UserDto.class);
+    }
 }

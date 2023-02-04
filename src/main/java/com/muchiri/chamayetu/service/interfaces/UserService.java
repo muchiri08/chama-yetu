@@ -8,6 +8,9 @@ import java.util.List;
 public interface UserService {
 
     UserDto createNewUser(UserDto user);
+
     List<UserDto> findAllUsers() throws NoDataFoundException;
+
+    UserDto updateUser(Long id, UserDto userDto);
 
 }
