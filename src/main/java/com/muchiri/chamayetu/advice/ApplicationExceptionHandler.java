@@ -89,6 +89,14 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public Map<String, String> handleUserNotFoundException(UserNotFoundException userNotFoundException){
+        errorMap.put("message", userNotFoundException.getMessage());
+
+        return errorMap;
+    }
+
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
 //    @ExceptionHandler(Exception.class)
 //    public Map<String, String> handleAnyException(Exception exception){

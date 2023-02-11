@@ -2,7 +2,7 @@ package com.muchiri.chamayetu.service.implementation;
 
 import com.muchiri.chamayetu.dto.UserDto;
 import com.muchiri.chamayetu.entity.User;
-import com.muchiri.chamayetu.exception.NoDataFoundException;
+import com.muchiri.chamayetu.exception.UserNotFoundException;
 import com.muchiri.chamayetu.repository.UserRepository;
 import com.muchiri.chamayetu.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +31,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> findAllUsers() throws NoDataFoundException {
+    public List<UserDto> findAllUsers() throws UserNotFoundException {
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {
-            throw new NoDataFoundException("No user found!");
+            throw new UserNotFoundException("No user found!");
         }
 
         List<UserDto> response = users.stream().map(user -> modelMapper.map(user, UserDto.class)).collect(Collectors.toList());
