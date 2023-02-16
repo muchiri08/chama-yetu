@@ -16,7 +16,7 @@ public class JwtUtil {
     private final String SECRET_KEY = "QWERTYUIOPLKJHGFDSAZXCVBNM";
     private final int TOKEN_VALIDITY = 3600 * 24; //24 hours
 
-    private String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder()
